@@ -1,7 +1,7 @@
 apply from: "gradle/vertx.gradle"
 apply plugin: 'scala'
 
-group = 'kr.soma'
+group = 'org.jokbal'
 
 repositories {
 	mavenCentral()
