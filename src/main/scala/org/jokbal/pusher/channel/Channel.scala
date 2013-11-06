@@ -53,10 +53,11 @@ object  Channel{
 
 }
 
-class Channel{
-  def subscribe(connection:Connection,data:JsonObject):Unit
-  def unsubscribe(connection:Connection,data:JsonObject):Unit
+abstract class Channel{
+  def subscribe(connection:Connection,data:JsonObject){}
+  def unsubscribe(connection:Connection,data:JsonObject){}
   def publishEvent[T](event:String,data:T):Boolean
-  def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject):Unit
+  def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject){}
   def isClientTriggerEnabled:Boolean
+  def signature(connection:Connection,data:JsonObject):String
 }

@@ -1,7 +1,7 @@
 package org.jokbal.pusher.channel
 
 import org.jokbal.pusher.connection.Connection
-import scala.collection.mutable
+import scala.collection.{JavaConversions, mutable}
 import org.vertx.scala.core.json._
 import org.jokbal.pusher.Event
 import org.jokbal.pusher.channel.sharedstore.SharedStore
@@ -13,13 +13,13 @@ import org.jokbal.pusher.channel.sharedstore.SharedStore
  * Time: 오후 8:50
  * To change this template use File | Settings | File Templates.
  */
-trait PresenceChannel extends Channel{
+trait PresenceChannel extends BaseChannel{
 
   val userIdMap = mutable.HashMap[Connection,String]()
-  val presenceData = SharedStore.presenceData(channelName)
+  val presenceStore = SharedStore.presenceData(channelName)
 
   override def subscribe(connection:Connection,data:JsonObject){
-    val channel_data= data.getObject(channelData)
+    val channel_data= data.getObject("channel_data")
     addMember(connection,channel_data)
     super.subscribe(connection,data)
   }
@@ -28,31 +28,40 @@ trait PresenceChannel extends Channel{
     super.unsubscribe(connection,data)
   }
 
-  override def sendSubscribeSuccessMessage(connection: Connection, data: JsonObject=Json.emptyObj())
+  override def sendSubscribeSucceededMessage(connection: Connection, data: JsonObject=Json.emptyObj())
   {
-    presenceData(sendPresenceData(connection,data))
+    presenceStore.getPresence(sendPresenceData(connection,data))
   }
 
   def addMember(connection:Connection,data:JsonObject)
   {
     val id = data.getString("user_id")
     val info = data.getObject("user_info")
-    presenceData.addMember(id,info)
+    presenceStore.addMember(id,info)
     userIdMap+=connection->id
     publishEvent(Event.memberAdded(channelName,data).toString)
   }
 
   def removeMember(connection:Connection)
   {
-    presenceData.removeMember((userIdMap get connection).get)
-    userIdMap-=connection
+    val data =Json.fromObjectString((userIdMap get connection).get)
+    presenceStore.removeMember(data.getString("user_id"))
     publishEvent(Event.memberRemoved(channelName,data).toString)
+    userIdMap-=connection
   }
 
-  def sendPresenceData(connection: Connection, data: JsonObject)(presence:JsonObject)
+  def sendPresenceData(connection: Connection, data: JsonObject)(hash:JsonObject)
   {
-    data.putObject("presence",presence)
-    super.sendSubscribeSuccessMessage(connection,data)
+    val ids:JsonArray = new JsonArray
+    for(i<-JavaConversions.mapAsScalaMap(hash.toMap)){
+      ids add i._1
+    }
+    val jsonData = Json.obj("ids"->ids,"hash"->hash,"count"->ids.size)
+    data.putObject("presence",jsonData)
+    super.sendSubscribeSucceededMessage(connection,data)
   }
+
+  override def signature(connection:Connection,data:JsonObject)=
+    connection.socketId+":"+channelName+":"+data.getObject("channel_data").toString
 
 }
