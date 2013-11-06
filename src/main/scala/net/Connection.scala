@@ -11,7 +11,6 @@ abstract class Connection {
   def sendTextFrame(str: String)
 }
 
-
 class WebSocketConnection(socket: ServerWebSocket) extends Connection {
   socket.dataHandler(DataHandler.handle(this) _)
   socket.closeHandler(fnToHandler(CloseHandler.handle(socketId) _))
@@ -19,7 +18,6 @@ class WebSocketConnection(socket: ServerWebSocket) extends Connection {
     socket.writeTextFrame(str)
   }
 }
-
 
 class SockJsConnection(socket: SockJSSocket) extends Connection {
   socket.dataHandler(DataHandler.handle(this) _)
