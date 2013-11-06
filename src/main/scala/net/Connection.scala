@@ -19,7 +19,7 @@ class WebSocketConnection(socket: ServerWebSocket) extends Connection {
   }
 }
 
-class SockJsConnection(socket: SockJSSocket) extends Connection {
+class SockJsSocketConnection(socket: SockJSSocket) extends Connection {
   socket.dataHandler(DataHandler.handle(this) _)
   def sendTextFrame(str: String) {
     socket.write(Buffer.apply(str))

@@ -13,6 +13,6 @@ class Main extends Verticle {
 
   def initialization() {
     eventBus = vertx.eventBus
-    container.deployVerticle("WebSocketServer")
+    container.deployVerticle("SocketServer")
   }
 }
