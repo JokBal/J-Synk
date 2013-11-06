@@ -18,10 +18,6 @@ class WebSocketConnection(socket: ServerWebSocket) extends Connection {
   def sendTextFrame(str: String) {
     socket.writeTextFrame(str)
   }
-
-  def dataHandler(data: Buffer):Unit =  {
-    println("test")
-  }
 }
 
 
