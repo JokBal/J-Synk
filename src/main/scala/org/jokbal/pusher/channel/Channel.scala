@@ -3,6 +3,7 @@ package org.jokbal.pusher.channel
 import org.vertx.scala.core.json.{JsonObject,Json,JsonArray}
 import org.jokbal.pusher.connection.Connection
 import org.vertx.scala.core.eventbus.EventBus
+import scala.collection.mutable
 
 
 /**
@@ -16,6 +17,40 @@ import org.vertx.scala.core.eventbus.EventBus
 object  Channel{
   var channelPrefix=""
   var eventBus:EventBus=null
+
+  val channelMap = mutable.HashMap[String,Channel]()
+
+  def apply(channelName:String):Channel = {
+    if(channelMap.contains(channelName))
+      return (channelMap get channelName).get
+    makeChannel(channelName)
+  }
+
+  val privatePattern = "(private-.*)".r
+  val presencePattern = "(presence-.*)".r
+
+  private def makeChannel(channelName:String)={
+    val channel = channelName match{
+      case privatePattern(c) =>{
+        //private channel
+        println("private channel Created")
+        new BaseChannel(channelName) with PrivateChannel
+      }
+      case presencePattern(c) => {
+        //presence channel with redis
+        println("presence channel Created")
+        new BaseChannel(channelName)  with PresenceChannel with PrivateChannel
+      }
+      case _ =>{
+        //public channel
+        println("public channel Created")
+        new BaseChannel(channelName)
+      }
+    }
+    channelMap+=channelName->channel
+    channel
+  }
+
 }
 
 class Channel{

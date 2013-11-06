@@ -83,7 +83,10 @@ class BaseChannel(val channelName:String) extends Channel{
     true
   }
 
-  override def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject)
+  override def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject=Json.emptyObj())
+  {
+    connection.sendTextFrame(Event.subscribeSuccess(channelName,data))
+  }
 
   override def isClientTriggerEnabled = false
 }
