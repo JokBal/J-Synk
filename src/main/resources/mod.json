@@ -1,3 +1,3 @@
 {
-    "main":"scala:org.jokbal.pusher.RestAPI.HttpVerticle"
+    "main":"scala:org.jokbal.puhser.verticle.Main"
 }
