@@ -1,4 +1,4 @@
-package org.jokbal.pusher
+package org.jokbal.pusher.Model
 
 import org.vertx.scala.core.json.Json
 

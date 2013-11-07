@@ -3,8 +3,8 @@ package org.jokbal.pusher.channel
 import org.jokbal.pusher.connection.Connection
 import scala.collection.{JavaConversions, mutable}
 import org.vertx.scala.core.json._
-import org.jokbal.pusher.Event
 import org.jokbal.pusher.channel.sharedstore.SharedStore
+import org.jokbal.pusher.Model.Event
 
 /**
  * Created with IntelliJ IDEA.

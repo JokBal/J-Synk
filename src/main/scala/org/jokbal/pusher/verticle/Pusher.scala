@@ -3,7 +3,7 @@ package org.jokbal.puhser.verticle
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.eventbus.EventBus
 
-class Main extends Verticle {
+class Pusher extends Verticle {
   var eventBus: EventBus = null
 
   override def start() {

@@ -2,7 +2,7 @@ package org.jokbal.pusher.verticle
 
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.http.{HttpServer, ServerWebSocket}
-import org.jokbal.pusher.net.{WebSocketConnection, SockJsSocketConnection, ConnectionManager}
+import org.jokbal.pusher.connection.{WebSocketConnection, SockJsSocketConnection, ConnectionManager}
 import org.vertx.scala.core.sockjs.{SockJSSocket, SockJSServer}
 import org.vertx.scala.core.json.JsonObject
 
