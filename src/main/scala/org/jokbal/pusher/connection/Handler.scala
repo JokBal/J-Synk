@@ -2,6 +2,7 @@ package org.jokbal.pusher.connection
 
 import org.vertx.scala.core.buffer.Buffer
 import org.vertx.scala.core.json.JsonObject
+import org.jokbal.pusher.model.DataModel
 
 object DataHandler{
 

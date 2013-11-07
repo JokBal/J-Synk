@@ -1,3 +1,4 @@
 {
-    "port":8080
+    "server_port" : 9999,
+    "server_enabled" : true
 }

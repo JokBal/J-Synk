@@ -18,6 +18,11 @@ dependencies {
 	compile "io.vertx:lang-scala:${scalaLangModVersion}"
 }
 
+test {
+    jvmArgs "-XX:MaxPermSize=256m"
+    systemProperty 'vertx.test.resources', 'src/test/script'
+}
+
 def configurePom(def pom) {
   pom.project {
     name rootProject.name

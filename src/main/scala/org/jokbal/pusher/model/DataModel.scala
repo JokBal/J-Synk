@@ -1,4 +1,4 @@
-package org.jokbal.pusher.connection
+package org.jokbal.pusher.model
 
 import org.vertx.scala.core.buffer.Buffer
 import org.vertx.scala.core.json.JsonObject
