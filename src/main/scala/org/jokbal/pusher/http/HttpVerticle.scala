@@ -1,4 +1,4 @@
-package org.jokbal.pusher.RestAPI
+package org.jokbal.pusher.http
 
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.json.JsonObject
