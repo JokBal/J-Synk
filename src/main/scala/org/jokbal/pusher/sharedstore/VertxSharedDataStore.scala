@@ -45,6 +45,10 @@ object VertxSharedDataStore extends SharedStore{
     }
     callback(result)
   }
+
+  override def hlen(hashName:String,callback:JsonObject=>Unit){
+    callback(sharedData.getMap(hashName).size())
+  }
   override def smembers(setName:String,callback:JsonArray=>Unit){
     val result = Json.emptyArr()
     val set = JavaConversions.asScalaSet(sharedData.getSet(setName))
@@ -53,4 +57,16 @@ object VertxSharedDataStore extends SharedStore{
       result.add(item)
     }
   }
+  override def sunion(callback:(JsonArray)=>Unit,setNames:String*){
+    val result = Json.emptyArr()
+    for(setName<-setNames){
+      val set = JavaConversions.asScalaSet(sharedData.getSet(setName))
+      for(item<-set)
+      {
+        result.add(item)
+      }
+    }
+    callback(result)
+  }
+
 }

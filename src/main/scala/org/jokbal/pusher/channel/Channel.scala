@@ -26,17 +26,17 @@ object  Channel{
     makeChannel(channelName)
   }
 
-  val privatePattern = "(private-.*)".r
-  val presencePattern = "(presence-.*)".r
+  private val privatePattern = "(private-.*)".r
+  private val presencePattern = "(presence-.*)".r
 
   private def makeChannel(channelName:String)={
     val channel = channelName match{
-      case privatePattern(c) =>{
+      case Channel.privatePattern(c) =>{
         //private channel
         println("private channel Created")
         new BaseChannel(channelName) with PrivateChannel
       }
-      case presencePattern(c) => {
+      case Channel.presencePattern(c) => {
         //presence channel with redis
         println("presence channel Created")
         new BaseChannel(channelName)  with PresenceChannel with PrivateChannel
