@@ -4,7 +4,7 @@ import scala.collection.mutable
 import org.vertx.scala.core.json.{JsonObject,Json,JsonArray}
 import org.vertx.scala.core.eventbus.Message
 import org.jokbal.pusher.connection.Connection
-import org.jokbal.pusher.Model.Event
+import org.jokbal.pusher.model.Event
 
 /**
  * Created with IntelliJ IDEA.
