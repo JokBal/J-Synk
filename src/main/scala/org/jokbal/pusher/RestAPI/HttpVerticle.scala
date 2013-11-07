@@ -1,4 +1,5 @@
-package org.jokbal.pusher
+package org.jokbal.pusher.RestAPI
+
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.json.JsonObject
 
@@ -9,7 +10,7 @@ class HttpVerticle extends Verticle{
 
     val conf = new JsonObject()
     conf.putNumber("server_port",9999)
-    conf.putString("server_enabled","true")
+    conf.putBoolean("server_enabled",true)
 
     val test = new HttpServerManager(vertx,conf)
 
