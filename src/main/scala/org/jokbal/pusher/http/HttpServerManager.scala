@@ -35,17 +35,13 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
           bf : Buffer =>
             val length = bf.length()
             val body = bf.getString(0,length)
-            val json = new JsonObject(body)
 
-            println(body)
+            val ev = new EventTrigger(body)
 
-            /*
-              TODO : send event by using publishEvent of Channel Class
-              */
-            req.response().setStatusCode(200).end()
+            ev.publishEvent
 
-
-
+            req.response().setStatusCode(ev.statusCode)
+              .setStatusMessage(ev.statusMessage).end()
         }
 
 
@@ -54,11 +50,11 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
 
     routeMatch.get("/apps/:appsId/channels",{
       req : HttpServerRequest =>
-        val appsId = req.params().get("appsId")
-        println("GET channels appsId : " + appsId)
+        val trigger = new ChannelTrigger(req) with Channels
 
         /*
         TODO : send Http response of all of current channels
+
         params :
           filter_by_prefix : Filter the returned channels by a specific prefix. For example in order to return only presence channels you would set filter_by_prefix=presence-
           info : A comma separated list of attributes which should be returned for each channel. If this parameter is missing, an empty hash of attributes will be returned for each channel
@@ -69,24 +65,24 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
         response :
          {
             "channels": {
-              "presence-foobar": {
+              "presence-foobar" : {
                 user_count: 42
               },
-              "presence-another": {
+              "presence-another" : {
                 user_count: 123
               }
             }
           }
          */
+
         req.response().setStatusCode(200).end()
 
     })
 
     routeMatch.get("/apps/:appsId/channels/:channelName",{
       req : HttpServerRequest =>
-        val appsId = req.params().get("appsId")
         val chName = req.params().get("channelName")
-        println("GET channels channelName appsId : " + appsId)
+        val trigger = new ChannelTrigger(req) with Channel
         println("GET channels channelName chName : " + chName)
 
         /*
@@ -98,10 +94,8 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
 
     routeMatch.get("/apps/:appsId/channels/:channelName/users",{
       req : HttpServerRequest =>
-
-        val appsId = req.params().get("appsId")
         val chName = req.params().get("channelName")
-        println("GET channels channelName users appsId : " + appsId)
+        val trigger = new ChannelTrigger(req) with Users
         println("GET channels channelName users chName : " + chName)
 
         /*

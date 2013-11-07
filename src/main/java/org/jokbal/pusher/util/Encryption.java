@@ -5,13 +5,14 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-/**
+/*
  * Created with IntelliJ IDEA.
  * User: infinitu
  * Date: 2013. 11. 7.
- * Time: 오전 5:26
+ * Time: AM 5:26
  * To change this template use File | Settings | File Templates.
  */
+
 public class Encryption {
     public static String hmacSHA256(String secret,String message) throws InvalidKeyException, NoSuchAlgorithmException {
         String algorithm = "HmacSHA256";
