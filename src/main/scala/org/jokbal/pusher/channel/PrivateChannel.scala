@@ -1,7 +1,7 @@
 package org.jokbal.pusher.channel
 
 import org.jokbal.pusher.connection.Connection
-import org.vertx.scala.core.json.JsonObj
+import org.vertx.scala.core.json.JsonObject
 import org.jokbal.pusher.util.Encryption
 
 /**

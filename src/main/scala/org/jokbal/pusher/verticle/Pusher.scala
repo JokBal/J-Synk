@@ -23,6 +23,7 @@ class Pusher extends Verticle {
     eventBus = vertx.eventBus
     println("test")
     container.deployVerticle("scala:org.jokbal.puhser.verticle.SocketServer")
+    container.deployVerticle("scala:org.jokbal.puhser.http.HttpVerticle")
     println("test2")
   }
 }

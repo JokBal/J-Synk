@@ -7,25 +7,22 @@ class EventTrigger(body : String){
 
   val trigger = new JsonObject(body)
   val eventName = trigger.getString("name")
-  val channels = trigger.getArray("channels")
+  val channels = trigger.getArray("channels").toArray.toSeq
   val dataString = trigger.getString("data")
-  var data = null
-  var statusCode = null
-  var statusMessage = null
+  var statusCode : Int = 200
+  var statusMessage : String = null
 
   def publishEvent() {
     if(checkDataSize){
-      for(channel <- channels){
+      for(ch <- channels){
+        val channel = ch.toString
         var json = new JsonObject
         json.putString("channel",channel)
         json.putString("event",eventName)
-        json.putObject("data",data)
+        json.putObject("data",new JsonObject(dataString))
 
+        Channel.publishEvent(channel,json.toString)
 
-        Channel(channel).publishEvent(eventName,json.toString)
-
-        statusCode = 200
-        statusMessage = "Successful Event Triggering to " + channel
       }
     }else{
       statusCode = 413
@@ -34,7 +31,7 @@ class EventTrigger(body : String){
 
   }
 
-  def checkDataSize(){
+  def checkDataSize() = {
     if(dataString.length >= 10000) false
     else true
   }

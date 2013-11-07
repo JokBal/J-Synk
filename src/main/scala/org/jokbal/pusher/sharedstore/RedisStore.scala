@@ -55,7 +55,7 @@ object RedisStore extends SharedStore{
       callback(msg.body.getObject("value"))
     })
   }
-  override def hlen(hashName:String,callback:JsonObject=>Unit){
+  override def hlen(hashName:String,callback:Int=>Unit){
     val args = Json.arr(hashName)
     val command = Json.obj("command"->"hlen","args"->args)
     Channel.eventBus.send[JsonObject](redisAddress,command,

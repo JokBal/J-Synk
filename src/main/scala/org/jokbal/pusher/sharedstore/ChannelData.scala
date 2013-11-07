@@ -21,6 +21,6 @@ class ChannelData(val sharedStore:SharedStore) {
     sharedStore.smembers("presence_channels",callback)
   }
   def Channels(callback:JsonArray=>Unit){
-    sharedStore.smembers(callback,"public_channels","private_channels","presence_channels")
+    sharedStore.sunion(callback,"public_channels","private_channels","presence_channels")
   }
 }

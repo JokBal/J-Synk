@@ -46,7 +46,7 @@ object VertxSharedDataStore extends SharedStore{
     callback(result)
   }
 
-  override def hlen(hashName:String,callback:JsonObject=>Unit){
+  override def hlen(hashName:String,callback:Int=>Unit){
     callback(sharedData.getMap(hashName).size())
   }
   override def smembers(setName:String,callback:JsonArray=>Unit){
