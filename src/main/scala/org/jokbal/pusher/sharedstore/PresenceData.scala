@@ -9,16 +9,16 @@ import org.vertx.scala.core.json._
  * Time: 오후 9:35
  * To change this template use File | Settings | File Templates.
  */
-class PresenceData(val channelName, val sharedStore:SharedStore){
+class PresenceData(val channelName:String, val sharedStore:SharedStore){
 
   def addMember[T](id:String,info:JsonObject){
-    sharedStore.hset(channelName,key->data.toString)
+    sharedStore.hset(channelName,id->info.toString)
   }
   def removeMember(key:String){
     sharedStore.hdel(channelName,key)
   }
 
-  def PresenceData(callback:JsonObject=>Unit){
+  def getPresence(callback:JsonObject=>Unit){
     sharedStore.hgetall(channelName,callback)
   }
 

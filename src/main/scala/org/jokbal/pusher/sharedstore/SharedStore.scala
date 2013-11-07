@@ -11,11 +11,11 @@ import org.vertx.scala.core.json.{Json,JsonObject,JsonArray}
  * To change this template use File | Settings | File Templates.
  */
 object SharedStore {
-  var sharedStore = VertxSharedDataStore
+  var sharedStore:SharedStore = VertxSharedDataStore
   def enableRedis(){
-    sharedStroe = RedisStore
+    sharedStore = RedisStore
   }
-  def presenceData(channelName:String)=new PresenceData(channelName)
+  def presenceData(channelName:String) = new PresenceData(channelName,sharedStore)
 }
 
 class SharedStore{

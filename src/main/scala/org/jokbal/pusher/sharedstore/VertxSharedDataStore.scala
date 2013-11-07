@@ -14,9 +14,9 @@ import scala.collection.JavaConversions
 object VertxSharedDataStore extends SharedStore{
   var sharedData:SharedData=null
   override def hset(hashName:String,values:(String, String)*){
-    val map = JavaConversions.mapAsScalaConcurrentMap(sharedData.getMap(hashName))
+    val map = JavaConversions.mapAsScalaConcurrentMap[String,String](sharedData.getMap(hashName))
     for(tuple<-values){
-      map.put(tuple._1,tuple._2)
+      map += tuple
     }
   }
   override def hdel(hashName:String,keys:String*){
@@ -26,7 +26,7 @@ object VertxSharedDataStore extends SharedStore{
     }
   }
   override def sadd(setName:String,values:String*){
-    val set = sharedData.getSet(setName)
+    val set = sharedData.getSet[String](setName)
     for(value<-values){
       set.add(value)
     }
