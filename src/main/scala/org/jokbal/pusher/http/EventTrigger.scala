@@ -14,7 +14,7 @@ class EventTrigger(body : String){
   var statusMessage = null
 
   def publishEvent() {
-    if(checkData){
+    if(checkDataSize){
       for(channel <- channels){
         var json = new JsonObject
         json.putString("channel",channel)
@@ -28,20 +28,14 @@ class EventTrigger(body : String){
         statusMessage = "Successful Event Triggering to " + channel
       }
     }else{
-
       statusCode = 413
       statusMessage = "Too large data parameter"
-
     }
 
   }
 
-  def checkData(){
+  def checkDataSize(){
     if(dataString.length >= 10000) false
     else true
   }
-
-
-
-
 }
