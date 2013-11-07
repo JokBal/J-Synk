@@ -1,4 +1,5 @@
-package org.jokbal.pusher
+package org.jokbal.pusher.RestAPI
+
 import org.vertx.scala.core.Vertx
 import org.vertx.scala.core.json.JsonObject
 import org.vertx.scala.core.http.{RouteMatcher, HttpServerRequest, HttpServer}
@@ -7,12 +8,12 @@ import org.vertx.scala.core.buffer.Buffer
 class HttpServerManager(vertx : Vertx,config : JsonObject){
 
   var server : HttpServer = null
-  val SERVER_ENABLED = config.getString("server_enabled")
+  val SERVER_ENABLED = config.getBoolean("server_enabled")
   val SERVER_PORT = config.getNumber("server_port").intValue()
 
   def startServer() {
 
-    if(SERVER_ENABLED.equals("true")){
+    if(SERVER_ENABLED){
       System.out.println("start Http Server!")
       server = vertx.createHttpServer()
       server.requestHandler(this.makeRouteMatcher).listen(SERVER_PORT)
