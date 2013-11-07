@@ -1,4 +1,4 @@
-package net
+package org.jokbal.pusher.net
 
 import org.vertx.scala.core.buffer.Buffer
 import org.vertx.scala.core.http.ServerWebSocket

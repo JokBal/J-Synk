@@ -1,4 +1,4 @@
-package net
+package org.jokbal.pusher.net
 
 import org.vertx.scala.core.buffer.Buffer
 import org.vertx.scala.core.json.JsonObject
@@ -14,7 +14,7 @@ object DataHandler{
   val PUSHER_INTERNAL_MEMBER_REMOVED = "pusher_internal:member_removed"
 
   def handle(connection: Connection)(buffer: Buffer) {
-    val data = new Data(buffer)
+    val data = new DataModel(buffer)
     val response: JsonObject = data.event match {
       case PING => ping()
       case PONG => pong()
@@ -31,11 +31,11 @@ object DataHandler{
     getResponseObject("pusher:ping", new JsonObject())
   }
 
-  def subscribe(data: Data): JsonObject = {
+  def subscribe(data: DataModel): JsonObject = {
     null
   }
 
-  def unsubscribe(data: Data): JsonObject = {
+  def unsubscribe(data: DataModel): JsonObject = {
     null
   }
 

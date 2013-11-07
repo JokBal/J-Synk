@@ -1,4 +1,4 @@
-package net
+package org.jokbal.pusher.net
 
 import scala.collection.mutable
 import org.vertx.scala.core.json.JsonObject

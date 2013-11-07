@@ -1,9 +1,9 @@
-package net
+package org.jokbal.pusher.net
 
 import org.vertx.scala.core.buffer.Buffer
 import org.vertx.scala.core.json.JsonObject
 
-class Data(buffer: Buffer) {
+class DataModel(buffer: Buffer) {
   private val jsonObject: JsonObject = new JsonObject(buffer.toString())
   private val dataJsonObject: JsonObject = jsonObject.getObject("data")
   val channelData : JsonObject = dataJsonObject.getObject("channel_data")

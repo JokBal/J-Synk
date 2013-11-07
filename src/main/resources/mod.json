@@ -1,3 +1,3 @@
 {
-    "main":"scala:verticle.WebSocketServer"
+    "main":"scala:org.jokbal.puhser.verticle.Main"
 }
