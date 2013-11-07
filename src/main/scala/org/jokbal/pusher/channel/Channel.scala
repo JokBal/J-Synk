@@ -51,6 +51,13 @@ object  Channel{
     channel
   }
 
+  /**
+   * publish event to event bus
+   * @param data the wrapped event data
+   */
+  def publishEvent(channelName:String,data:String)={
+    Channel.eventBus.publish(Channel.channelPrefix+channelName,data)
+  }
 }
 
 abstract class Channel{

@@ -79,7 +79,7 @@ class BaseChannel(val channelName:String) extends Channel{
    */
   def publishEvent(data:String):Boolean=
   {
-    Channel.eventBus.publish(Channel.channelPrefix+channelName,data)
+    Channel.publishEvent(channelName,data)
     true
   }
 
