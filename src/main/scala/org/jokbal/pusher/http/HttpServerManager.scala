@@ -1,4 +1,4 @@
-package org.jokbal.pusher.RestAPI
+package org.jokbal.pusher.http
 
 import org.vertx.scala.core.Vertx
 import org.vertx.scala.core.json.JsonObject
@@ -8,8 +8,8 @@ import org.vertx.scala.core.buffer.Buffer
 class HttpServerManager(vertx : Vertx,config : JsonObject){
 
   var server : HttpServer = null
-  val SERVER_ENABLED = config.getBoolean("server_enabled")
-  val SERVER_PORT = config.getNumber("server_port").intValue()
+  val SERVER_ENABLED = config.getBoolean("server_enabled",true)
+  val SERVER_PORT = config.getNumber("server_port",9999).intValue()
 
   def startServer() {
 
@@ -18,6 +18,7 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
       server = vertx.createHttpServer()
       server.requestHandler(this.makeRouteMatcher).listen(SERVER_PORT)
     }
+
     else throw new Exception("Http Server Config is not defined as true")
 
   }
@@ -40,8 +41,11 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
 
             /*
               TODO : send event by using publishEvent of Channel Class
-             */
+              */
             req.response().setStatusCode(200).end()
+
+
+
         }
 
 
