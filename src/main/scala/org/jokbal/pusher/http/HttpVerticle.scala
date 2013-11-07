@@ -12,7 +12,7 @@ class HttpVerticle extends Verticle{
     val test = new HttpServerManager(vertx,conf)
 
     test.startServer()
-    System.out.println("Test HttpVerticle Startdd")
+    System.out.println("Test HttpVerticle Start")
 
   }
 
