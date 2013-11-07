@@ -23,10 +23,16 @@ trait GetChannels{
 
   def get(req : HttpServerRequest) = {
 
-    val filter = req.params().get("filter_by_prefix")
+    var filter = req.params().get("filter_by_prefix")
+
+    if(filter == null){
+      filter = ""
+    }
+
     val channelList = getFilteredList(filter)
     val info = req.params().get("info")
     var attrs : Array[String]= null
+
 
     if(info != null){
       attrs = getAttributes(info)
@@ -54,20 +60,29 @@ trait GetChannels{
     info.split(",")
   }
 
-  def getFilteredList(filter : String) : Array[Object] = {
-    var channelList : Array[Object] = null
+  def getFilteredList(filter : String) = {
+    var channelList : Seq[Any] = null
     filter match {
-      case "public-" => SharedStore.channelData.publicChannels({
-        json : JsonArray => channelList = json.toArray
-      })
       case "private-" => SharedStore.channelData.privateChannels({
-        json : JsonArray => channelList = json.toArray
+        json : JsonArray => channelList = json.toArray.toSeq
       })
       case "presence-" => SharedStore.channelData.presenceChannels({
-        json : JsonArray => channelList = json.toArray
+        json : JsonArray => channelList = json.toArray.toSeq
       })
+      case "" => SharedStore.channelData.Channels({
+        json : JsonArray => channelList = json.toArray.toSeq
+      })
+      case s : String =>
+        SharedStore.channelData.Channels({
+          json : JsonArray =>
+            val list = json.toArray.toSeq
+            for(channel <- list if(channel.toString.substring(0,s.length).equals(s))){
+              channelList += channel.toString
+            }
+        })
+
     }
-    return channelList
+    channelList
   }
 
   def getInfo(attrs : Array[String], chName : String) : JsonObject = {
