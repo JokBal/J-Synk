@@ -1,7 +1,7 @@
 package org.jokbal.pusher.channel
 
 import org.jokbal.pusher.connection.Connection
-import org.vertx.scala.core.json._
+import org.vertx.scala.core.json.JsonObj
 import org.jokbal.pusher.util.Encryption
 
 /**
@@ -28,4 +28,5 @@ trait PrivateChannel extends BaseChannel{
     auth.equals(apikey+":"+encryptedSignature)
   }
 
+  override def isClientTriggerEnabled: Boolean = true
 }

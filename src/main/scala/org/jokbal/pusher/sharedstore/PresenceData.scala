@@ -22,4 +22,8 @@ class PresenceData(val channelName:String, val sharedStore:SharedStore){
     sharedStore.hgetall(channelName,callback)
   }
 
+  def getPresenceCount(callback:Int=>Unit){
+    sharedStore.hlen(channelName,callback)
+  }
+
 }
