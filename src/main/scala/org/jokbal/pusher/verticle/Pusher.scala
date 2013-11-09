@@ -1,4 +1,4 @@
-package org.jokbal.puhser.verticle
+package org.jokbal.pusher.verticle
 
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.eventbus.{MessageData, EventBus}

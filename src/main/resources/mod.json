@@ -1,0 +1,3 @@
+{
+    "main":"scala:org.jokbal.pusher.verticle.Pusher"
+}

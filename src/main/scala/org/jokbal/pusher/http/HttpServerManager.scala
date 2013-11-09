@@ -36,11 +36,11 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
             val ev = new EventTrigger(body)
 
             if(ev.publishEvent){
-              req.response().setStatusCode(ev.statusCode)
-                .setStatusMessage(ev.statusMessage).end()
+              req.response().setStatusCode(ev.responseCode)
+                .setStatusMessage(ev.responseMessage).end()
             }else{
-              req.response().setStatusCode(ev.statusCode)
-                .setStatusMessage(ev.statusMessage).end()
+              req.response().setStatusCode(ev.responseCode)
+                .setStatusMessage(ev.responseMessage).end()
             }
 
 

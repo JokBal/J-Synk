@@ -9,10 +9,10 @@ class EventTrigger(body : String){
   val eventName = trigger.getString("name")
   val channels = trigger.getArray("channels").toArray.toSeq
   val dataString = trigger.getString("data")
-  var statusCode : Int = 200
-  var statusMessage : String = null
+  var responseCode : Int = 200
+  var responseMessage : String = null
 
-  def publishEvent() {
+  def publishEvent() : Boolean = {
     if(checkDataSize){
       for(ch <- channels){
         val channel = ch.toString
@@ -25,20 +25,20 @@ class EventTrigger(body : String){
           Channel.publishEvent(channel,json.toString)
         }catch{
           case e:NullPointerException => {
-            statusCode = 400
-            statusCode = "There doesn't exist channel " + channel
+            responseCode = 400
+            responseMessage = "There doesn't exist channel " + channel
             return false
           }
         }
 
       }
     }else{
-      statusCode = 413
-      statusMessage = "Too large data parameter"
+      responseCode = 413
+      responseMessage = "Too large data parameter"
       return false
     }
 
-    println(statusCode + " : " + statusMessage)
+    println(responseCode + " : " + responseMessage)
 
     return true
 

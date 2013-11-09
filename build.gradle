@@ -11,15 +11,13 @@ dependencies {
 	// Libraries needed to run the scala tools
     compile "org.scala-lang:scala-compiler:${scalaVersion}"
     compile "org.scala-lang:scala-library:${scalaVersion}"
-
-
 	// Libraries needed for scala api
 	compile "org.scala-lang:scala-library:${scalaVersion}"
 	compile "io.vertx:lang-scala:${scalaLangModVersion}"
 }
 
 test {
-    jvmArgs "-XX:MaxPermSize=256m"
+    jvmArgs "-XX:MaxPermSize=512m"
     systemProperty 'vertx.test.resources', 'src/test/script'
 }
 

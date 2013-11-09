@@ -55,7 +55,7 @@ trait GetChannels{
 
     json.putObject("channels",channels)
     responseMessage = json.toString
-    println(statusCode + " : " + statusMessage)
+    println(responseCode + " : " + responseCode)
     return true
 
   }
@@ -113,8 +113,6 @@ trait GetChannels{
 
 trait GetChannel extends GetChannels{
 
-  override var responseMessage : String = null
-
   override def get(req : HttpServerRequest) : Boolean= {
 
     val channelName = req.params().get("channelName")
@@ -131,7 +129,7 @@ trait GetChannel extends GetChannels{
     }
 
     responseMessage = getInfo(attrs,channelName).toString
-    println(statusCode + " : " + statusMessage)
+    println(responseCode + " : " + responseMessage)
     return true
 
   }
@@ -185,7 +183,7 @@ trait GetUsers{
       })
       json.putArray("users",users)
       responseMessage = json.toString
-      println(statusCode + " : " + statusMessage)
+      println(responseCode + " : " + responseCode)
       return true
     }
 
