@@ -1,4 +1,4 @@
-package util
+package org.jokbal.pusher.util
 
 import org.vertx.scala.core.eventbus.{MessageData, EventBus}
 import org.vertx.scala.core.eventbus
