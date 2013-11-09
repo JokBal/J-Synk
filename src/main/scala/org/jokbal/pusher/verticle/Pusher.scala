@@ -6,7 +6,7 @@ import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
 import org.vertx.java.core.eventbus.Message
 import org.vertx.scala.core.eventbus
-import util.WrappedEventBus
+import org.jokbal.pusher.util.WrappedEventBus
 
 object Pusher{
   var apikey = ""

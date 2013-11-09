@@ -8,7 +8,7 @@ import org.vertx.scala.core.eventbus.{EventBus, MessageData, Message}
 import org.jokbal.puhser.verticle.Pusher
 import org.jokbal.pusher.connection.Connection
 import org.jokbal.pusher.model.Event
-import util.WrappedEventBus
+import org.jokbal.pusher.util.WrappedEventBus
 
 
 /**
@@ -42,6 +42,7 @@ class PublicChannelTest extends TestVerticle{
   def publicEventTest(){
     val eventName = "A EventName for Public Channel Test"
     val eventData = "A EventData for Public Channel Test"
+    var testStarted = false
     val mockEventBus = new WrappedEventBus("test",vertx.eventBus){
       override def publish[T](address: String, value: T)(implicit evidence$1: (T) => MessageData): EventBus = {
         assertEquals(address,CHANNEL_NAME)
@@ -52,7 +53,7 @@ class PublicChannelTest extends TestVerticle{
     Pusher.init(Json.emptyObj(),vertx.eventBus,vertx.sharedData)
     val mockConnection = new Connection{
       def sendTextFrame(str: String){
-        if(str.equals(Event("pusher_internal:subscription_succeeded",CHANNEL_NAME,"{}").toString))
+        if(testStarted)
           return
         assertEquals(str,Event(eventName,CHANNEL_NAME,eventData).toString)
         testComplete()
@@ -60,6 +61,7 @@ class PublicChannelTest extends TestVerticle{
     }
     val channel = Channel(CHANNEL_NAME)
     channel.subscribe(mockConnection,Json.emptyObj())
+    testStarted = true
     channel.publishEvent(eventName,eventData)
   }
 }
