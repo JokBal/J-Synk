@@ -1,9 +1,12 @@
 package org.jokbal.puhser.verticle
 
 import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.eventbus.EventBus
+import org.vertx.scala.core.eventbus.{MessageData, EventBus}
 import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
+import org.vertx.java.core.eventbus.Message
+import org.vertx.scala.core.eventbus
+import util.WrappedEventBus
 
 object Pusher{
   var apikey = ""
@@ -16,13 +19,14 @@ object Pusher{
   var redis_enable:Boolean=false
   var redis_address:String=null
 
-  var eventBus:EventBus=null
+  var eventBus:WrappedEventBus=null
   var sharedData:SharedData=null
 
   def init(config:JsonObject,eventBus:EventBus,sharedData:SharedData)
   {
     Pusher.port = config.getInteger("port",8080)
     Pusher.eventBus_prefix = config.getString("eventbus_prefix","Pusher::")
+    Pusher.eventBus = new  WrappedEventBus(eventBus_prefix,eventBus)
     Pusher.sharedData_prefix = config.getString("sharedData_prefix",Pusher.eventBus_prefix)
     Pusher.ExternalCommandChannel =config.getString("commandChannel","pusher_command")
     Pusher.authorizationChannel = config.getString("authorizationChannel","pusher_auth")
@@ -30,6 +34,8 @@ object Pusher{
     val redis_config = config.getObject("redis_config")
     Pusher.redis_address = redis_config.getString("address")
   }
+
+
 
 }
 

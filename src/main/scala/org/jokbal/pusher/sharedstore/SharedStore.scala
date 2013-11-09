@@ -2,6 +2,7 @@ package org.jokbal.pusher.channel.sharedstore
 
 
 import org.vertx.scala.core.json.{Json,JsonObject,JsonArray}
+import org.jokbal.pusher.sharedstore.ChannelData
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +17,7 @@ object SharedStore {
     sharedStore = RedisStore
   }
   def presenceData(channelName:String) = new PresenceData(channelName,sharedStore)
+  def channelData() = new ChannelData(sharedStore)
 }
 
 class SharedStore{

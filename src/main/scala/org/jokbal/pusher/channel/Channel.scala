@@ -62,7 +62,7 @@ object  Channel{
 
 abstract class Channel{
   def subscribe(connection:Connection,data:JsonObject){}
-  def unsubscribe(connection:Connection,data:JsonObject){}
+  def unsubscribe(connection:Connection){}
   def publishEvent[T](event:String,data:T):Boolean
   def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject){}
   def isClientTriggerEnabled:Boolean

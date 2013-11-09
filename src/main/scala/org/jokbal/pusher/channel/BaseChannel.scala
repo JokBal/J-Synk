@@ -5,6 +5,7 @@ import org.vertx.scala.core.json.{JsonObject,Json,JsonArray}
 import org.vertx.scala.core.eventbus.Message
 import org.jokbal.pusher.connection.Connection
 import org.jokbal.pusher.model.Event
+import org.jokbal.puhser.verticle.Pusher
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,7 @@ import org.jokbal.pusher.model.Event
 class BaseChannel(val channelName:String) extends Channel{
   // the connections that subscribe this channel
   val connections = mutable.Buffer[Connection]()
-  Channel.eventBus.registerHandler(Channel.channelPrefix+channelName,handleEvent _)
+  Channel.eventBus.registerHandler(Pusher.eventBus_prefix+channelName,handleEvent _)
  println("register Handler on "+Channel.channelPrefix+channelName)
 
   /**
@@ -34,7 +35,7 @@ class BaseChannel(val channelName:String) extends Channel{
    * unsubscribe this channel
    * @param connection the connection that try to unsubscribe
    */
-  def unsubscribe(connection:Connection)
+  override def unsubscribe(connection:Connection)
   {
     connections-=connection
   }

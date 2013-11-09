@@ -23,9 +23,9 @@ trait PresenceChannel extends BaseChannel{
     addMember(connection,channel_data)
     super.subscribe(connection,data)
   }
-  override def unsubscribe(connection:Connection,data:JsonObject){
+  override def unsubscribe(connection:Connection){
     removeMember(connection)
-    super.unsubscribe(connection,data)
+    super.unsubscribe(connection)
   }
 
   override def sendSubscribeSucceededMessage(connection: Connection, data: JsonObject=Json.emptyObj())
