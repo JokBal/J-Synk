@@ -24,7 +24,7 @@ class SharedStore{
   def sadd(setName:String,values:String*){}
   def srem(setName:String,values:String*){}
   def hgetall(hashName:String,callback:(JsonObject)=>Unit){}
-  def hlen(hashName:String,callback:JsonObject=>Unit){}
+  def hlen(hashName:String,callback:Int=>Unit){}
   def smembers(setName:String,callback:(JsonArray)=>Unit){}
   def sunion(callback:(JsonArray)=>Unit,setNames:String*){}
 }
