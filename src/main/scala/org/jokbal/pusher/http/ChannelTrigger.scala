@@ -21,7 +21,7 @@ trait GetChannels{
     responseMessage
   }
 
-  def get(req : HttpServerRequest) = {
+  def get(req : HttpServerRequest) : Boolean= {
 
     var filter = req.params().get("filter_by_prefix")
 
@@ -37,8 +37,10 @@ trait GetChannels{
     if(info != null){
       attrs = getAttributes(info)
       for(attr <- attrs if(attr.equals("user_count") && !filter.equals("presence-")) ){
+
         responseCode = 400
         responseMessage = "user_count is attribute only for presence channel"
+        return false
       }
     }
 
@@ -53,6 +55,8 @@ trait GetChannels{
 
     json.putObject("channels",channels)
     responseMessage = json.toString
+    println(statusCode + " : " + statusMessage)
+    return true
 
   }
 
@@ -88,6 +92,10 @@ trait GetChannels{
   def getInfo(attrs : Array[String], chName : String) : JsonObject = {
     var info = new JsonObject
 
+    if(attrs == null){
+      return info
+    }
+
     for(attr <- attrs){
       attr match {
         case "user_count" =>
@@ -105,7 +113,9 @@ trait GetChannels{
 
 trait GetChannel extends GetChannels{
 
-  override def get(req : HttpServerRequest) = {
+  override var responseMessage : String = null
+
+  override def get(req : HttpServerRequest) : Boolean= {
 
     val channelName = req.params().get("channelName")
     val info = req.params().get("info")
@@ -116,10 +126,13 @@ trait GetChannel extends GetChannels{
       for(attr <- attrs if(attr.equals("user_count") && !channelName.substring(0,9).equals("presence-"))){
         responseCode = 400
         responseMessage = "user_count is attribute only for presence channel"
+        return false
       }
     }
 
     responseMessage = getInfo(attrs,channelName).toString
+    println(statusCode + " : " + statusMessage)
+    return true
 
   }
 
@@ -132,6 +145,7 @@ trait GetChannel extends GetChannels{
     }else{
       info.putBoolean("occupied",true)
     }
+
     return info
   }
 
@@ -150,7 +164,7 @@ trait GetUsers{
     responseMessage
   }
 
-  def get(req : HttpServerRequest) = {
+  def get(req : HttpServerRequest) : Boolean = {
 
     val channelName = req.params().get("channelName")
     var json = new JsonObject
@@ -158,6 +172,7 @@ trait GetUsers{
     if(!channelName.substring(0,9).equals("presence-")){
       responseCode = 400
       responseMessage = "/users API is only for presence channel"
+      return false
     }else{
       SharedStore.presenceData(channelName).getPresence({
         json : JsonObject =>
@@ -170,6 +185,8 @@ trait GetUsers{
       })
       json.putArray("users",users)
       responseMessage = json.toString
+      println(statusCode + " : " + statusMessage)
+      return true
     }
 
 
