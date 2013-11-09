@@ -1,8 +1,8 @@
 package org.jokbal.pusher.connection
 
 import scala.collection.mutable
-import org.vertx.scala.core.json.JsonObject
 import org.jokbal.pusher.model.Event
+import org.jokbal.pusher.channel.Channel
 
 object ConnectionManager {
   val connections = mutable.HashMap[String, Connection]()
@@ -14,7 +14,6 @@ object ConnectionManager {
   }
 
   def disconnect(socketId: String) {
-    println("disconnect");
     connections -= socketId
   }
 
