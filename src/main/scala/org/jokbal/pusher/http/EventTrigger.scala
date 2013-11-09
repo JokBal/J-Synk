@@ -21,13 +21,26 @@ class EventTrigger(body : String){
         json.putString("event",eventName)
         json.putObject("data",new JsonObject(dataString))
 
-        Channel.publishEvent(channel,json.toString)
+        try{
+          Channel.publishEvent(channel,json.toString)
+        }catch{
+          case e:NullPointerException => {
+            statusCode = 400
+            statusCode = "There doesn't exist channel " + channel
+            return false
+          }
+        }
 
       }
     }else{
       statusCode = 413
       statusMessage = "Too large data parameter"
+      return false
     }
+
+    println(statusCode + " : " + statusMessage)
+
+    return true
 
   }
 
