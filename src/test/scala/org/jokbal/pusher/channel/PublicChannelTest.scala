@@ -53,9 +53,9 @@ class PublicChannelTest extends TestVerticle{
     Pusher.init(Json.emptyObj(),vertx.eventBus,vertx.sharedData)
     val mockConnection = new Connection{
       def sendTextFrame(str: String){
-        if(testStarted)
+        if(!testStarted)
           return
-        assertEquals(str,Event(eventName,CHANNEL_NAME,eventData).toString)
+        assertEquals(Event(eventName,CHANNEL_NAME,eventData).toString,str)
         testComplete()
       }
     }

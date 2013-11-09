@@ -43,14 +43,14 @@ class Pusher extends Verticle {
 
   override def start() {
     val config = container.config()
-    Pusher.init(config,vertx.eventBus,vertx.sharedData)
-    initialization
+    initialization(config)
   }
 
-  def initialization() {
+  def initialization(config:JsonObject) {
     println("test")
-    container.deployVerticle("scala:org.jokbal.puhser.verticle.SocketServer")
-    container.deployVerticle("scala:org.jokbal.puhser.http.HttpVerticle")
+    Pusher.init(config,vertx.eventBus,vertx.sharedData)
+    container.deployVerticle("scala:org.jokbal.puhser.verticle.SocketServer",config)
+    container.deployVerticle("scala:org.jokbal.puhser.http.HttpVerticle",config)
     println("test2")
   }
 }

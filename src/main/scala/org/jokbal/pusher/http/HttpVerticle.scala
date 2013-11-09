@@ -1,7 +1,7 @@
 package org.jokbal.pusher.http
 
 import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.json.JsonObject
+import org.jokbal.puhser.verticle.Pusher
 
 class HttpVerticle extends Verticle{
 
@@ -9,6 +9,7 @@ class HttpVerticle extends Verticle{
     super.start()
 
     val conf = container.config()
+    Pusher.init(conf,vertx.eventBus,vertx.sharedData)
     val test = new HttpServerManager(vertx,conf)
 
     test.startServer()
