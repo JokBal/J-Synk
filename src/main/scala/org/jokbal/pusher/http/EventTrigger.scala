@@ -23,6 +23,7 @@ class EventTrigger(body : String){
 
         try{
           Channel.publishEvent(channel,json.toString)
+          println(json.toString)
         }catch{
           case e:NullPointerException => {
             responseCode = 400

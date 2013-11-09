@@ -5,7 +5,6 @@ import org.vertx.scala.core.http.{HttpServer, ServerWebSocket}
 import org.jokbal.pusher.connection.{WebSocketConnection, SockJsSocketConnection, ConnectionManager}
 import org.vertx.scala.core.sockjs.{SockJSSocket, SockJSServer}
 import org.vertx.scala.core.json.JsonObject
-import org.jokbal.puhser.verticle.Pusher
 
 class SocketServer extends Verticle {
 

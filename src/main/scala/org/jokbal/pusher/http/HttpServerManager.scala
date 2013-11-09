@@ -9,7 +9,7 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
 
   var server : HttpServer = null
   val SERVER_ENABLED = config.getBoolean("server_enabled",true)
-  val SERVER_PORT = config.getNumber("server_port",8080).intValue()
+  val SERVER_PORT = config.getNumber("server_port",9999).intValue()
 
   def startServer() {
 
@@ -17,6 +17,8 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
       System.out.println("start Http Server!")
       server = vertx.createHttpServer()
       server.requestHandler(makeRouteMatcher).listen(SERVER_PORT)
+      println("http server on port " + SERVER_PORT)
+
     }
 
     else throw new Exception("Http Server Config is not defined as true")
@@ -31,11 +33,13 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
       req : HttpServerRequest =>
         req.dataHandler{
           bf : Buffer =>
+            println("POST event trigger is now received")
             val length = bf.length()
             val body = bf.getString(0,length)
             val ev = new EventTrigger(body)
 
             if(ev.publishEvent){
+              println("event trigger is published successfully now")
               req.response().setStatusCode(ev.responseCode)
                 .setStatusMessage(ev.responseMessage).end()
             }else{

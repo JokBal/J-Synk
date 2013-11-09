@@ -9,8 +9,9 @@ class HttpServerVerticle extends Verticle{
     val conf = container.config()
     Pusher.init(conf,vertx.eventBus,vertx.sharedData)
     val test = new HttpServerManager(vertx,conf)
+    test.startServer
+    println("Succeed to start Http Server Verticle")
 
-    test.startServer()
   }
 
 
