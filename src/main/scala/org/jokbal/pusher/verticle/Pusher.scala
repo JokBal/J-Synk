@@ -3,6 +3,7 @@ package org.jokbal.puhser.verticle
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.eventbus.EventBus
 import org.vertx.scala.core.json._
+import org.vertx.scala.core.shareddata.SharedData
 
 object Pusher{
   var apikey = ""
@@ -15,7 +16,10 @@ object Pusher{
   var redis_enable:Boolean=false
   var redis_address:String=null
 
-  def setConfig(config:JsonObject)
+  var eventBus:EventBus=null
+  var sharedData:SharedData=null
+
+  def init(config:JsonObject,eventBus:EventBus,sharedData:SharedData)
   {
     Pusher.port = config.getInteger("port",8080)
     Pusher.eventBus_prefix = config.getString("eventbus_prefix","Pusher::")
@@ -30,15 +34,14 @@ object Pusher{
 }
 
 class Pusher extends Verticle {
-  var eventBus: EventBus = null
 
   override def start() {
     val config = container.config()
+    Pusher.init(config,vertx.eventBus,vertx.sharedData)
     initialization
   }
 
   def initialization() {
-    eventBus = vertx.eventBus
     println("test")
     container.deployVerticle("scala:org.jokbal.puhser.verticle.SocketServer")
     container.deployVerticle("scala:org.jokbal.puhser.http.HttpVerticle")
