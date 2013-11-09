@@ -2,19 +2,21 @@ package org.jokbal.pusher.connection
 
 import scala.collection.mutable
 import org.vertx.scala.core.json.JsonObject
+import org.jokbal.pusher.model.Event
 
 object ConnectionManager {
   val connections = mutable.HashMap[String, Connection]()
 
   def connect(connection: Connection) {
-    val jsonObject = new JsonObject()
-    jsonObject.putString("socket_id", connection.socketId)
-    connection.sendTextFrame(DataHandler.getResponseObject("pusher:connection_established", jsonObject) toString)
+    println("connect");
+    connection.sendTextFrame(Event.established(connection.socketId).toString)
     connections += connection.socketId->connection
   }
 
   def disconnect(socketId: String) {
+    println("disconnect");
     connections -= socketId
   }
+
 }
 

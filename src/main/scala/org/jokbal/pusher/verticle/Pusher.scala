@@ -34,23 +34,15 @@ object Pusher{
     val redis_config = config.getObject("redis_config",Json.emptyObj())
     Pusher.redis_address = redis_config.getString("address")
   }
-
-
-
 }
 
 class Pusher extends Verticle {
 
   override def start() {
     val config = container.config()
-    initialization(config)
-  }
-
-  def initialization(config:JsonObject) {
-    println("test")
     Pusher.init(config,vertx.eventBus,vertx.sharedData)
     container.deployVerticle("scala:org.jokbal.puhser.verticle.SocketServer",config)
-    container.deployVerticle("scala:org.jokbal.puhser.http.HttpVerticle",config)
-    println("test2")
+    container.deployVerticle("scala:org.jokbal.puhser.verticle.HttpServer",config)
+
   }
 }

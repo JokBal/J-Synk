@@ -5,18 +5,22 @@ import org.vertx.scala.core.http.{HttpServer, ServerWebSocket}
 import org.jokbal.pusher.connection.{WebSocketConnection, SockJsSocketConnection, ConnectionManager}
 import org.vertx.scala.core.sockjs.{SockJSSocket, SockJSServer}
 import org.vertx.scala.core.json.JsonObject
+import org.jokbal.puhser.verticle.Pusher
 
 class SocketServer extends Verticle {
 
   override def start() {
-    val port = 8080
+
+    val conf = container.config()
+    Pusher.init(conf,vertx.eventBus,vertx.sharedData)
+
     val httpServer: HttpServer = vertx.createHttpServer()
     val sockJsServer: SockJSServer = vertx.createSockJSServer(httpServer)
     httpServer.websocketHandler(webSocketOpenHandler _)
     sockJsServer.installApp(new JsonObject().putString("prefix", "/pusher"), sockJsSocketOpenHandler _)
-    httpServer listen 8080
-    println("WebSocket Server Listening on " + port)
-    println("SockJs Server Listening on " + port)
+    httpServer listen Pusher.port
+    println("WebSocket Server Listening on " + Pusher.port)
+    println("SockJs Server Listening on " + Pusher.port)
   }
 
   def webSocketOpenHandler(socket: ServerWebSocket):Unit = {

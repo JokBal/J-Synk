@@ -2,7 +2,6 @@ package org.jokbal.pusher.verticle
 
 import org.vertx.scala.platform.Verticle
 import org.jokbal.pusher.http.HttpServerManager
-
 class HttpServerVerticle extends Verticle{
 
   override def start(){

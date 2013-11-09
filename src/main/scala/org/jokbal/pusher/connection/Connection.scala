@@ -5,22 +5,55 @@ import org.vertx.scala.core.http.ServerWebSocket
 import org.vertx.scala.core.sockjs.SockJSSocket
 import org.vertx.scala.core.FunctionConverters._
 import java.util.UUID
+import org.jokbal.pusher.model.{Event, Data}
+import org.jokbal.pusher.channel.Channel
+import org.vertx.java.core.json.JsonObject
 
 abstract class Connection {
   val socketId = UUID.randomUUID().toString
+
   def sendTextFrame(str: String)
+
+  def dataHandler(connection: Connection)(buffer: Buffer) {
+    val data = new Data(buffer)
+    println("channel :" + data.channel)
+    println("event : " + data.event)
+    println(data.dataJsonObject.toString)
+    data.event match {
+      case Event.SUBSCRIBE => Channel(data.channel).subscribe(connection, data.dataJsonObject)
+      case Event.UNSUBSCRIBE => Channel(data.channel).unsubscribe(connection)
+      case Event.PING =>  {
+        connection.sendTextFrame(Event.pong.toString)
+      }
+      case Event.PONG => {
+        connection.sendTextFrame(Event.ping.toString)
+      }
+      case Event.CLIENT_EVENT(c) => {
+        val channel=Channel(data.channel)
+        if(channel.isClientTriggerEnabled) {
+          channel.publishEvent(data.event, data.dataJsonObject)
+        }
+      }
+      case _ => {
+      }
+    }
+  }
+
+  def closeHandler(socketId: String)(void:Void) {
+    ConnectionManager.disconnect(socketId)
+  }
 }
 
 class WebSocketConnection(socket: ServerWebSocket) extends Connection {
-  socket.dataHandler(DataHandler.handle(this) _)
-  socket.closeHandler(fnToHandler(CloseHandler.handle(socketId) _))
+  socket.dataHandler(dataHandler(this) _)
+  socket.closeHandler(closeHandler(socketId) _)
   def sendTextFrame(str: String) {
     socket.writeTextFrame(str)
   }
 }
 
 class SockJsSocketConnection(socket: SockJSSocket) extends Connection {
-  socket.dataHandler(DataHandler.handle(this) _)
+  socket.dataHandler(dataHandler(this) _)
   def sendTextFrame(str: String) {
     socket.write(Buffer.apply(str))
   }
