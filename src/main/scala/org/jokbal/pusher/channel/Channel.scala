@@ -4,6 +4,7 @@ import org.vertx.scala.core.json.{JsonObject,Json,JsonArray}
 import org.jokbal.pusher.connection.Connection
 import org.vertx.scala.core.eventbus.EventBus
 import scala.collection.mutable
+import org.jokbal.puhser.verticle.Pusher
 
 
 /**
@@ -56,7 +57,7 @@ object  Channel{
    * @param data the wrapped event data
    */
   def publishEvent(channelName:String,data:String)={
-    Channel.eventBus.publish(Channel.channelPrefix+channelName,data)
+    Pusher.eventBus.publish(channelName,data)
   }
 }
 

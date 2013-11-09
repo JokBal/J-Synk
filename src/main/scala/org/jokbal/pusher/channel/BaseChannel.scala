@@ -17,7 +17,7 @@ import org.jokbal.puhser.verticle.Pusher
 class BaseChannel(val channelName:String) extends Channel{
   // the connections that subscribe this channel
   val connections = mutable.Buffer[Connection]()
-  Channel.eventBus.registerHandler(Pusher.eventBus_prefix+channelName,handleEvent _)
+  Pusher.eventBus.registerHandler(channelName,handleEvent _)
  println("register Handler on "+Channel.channelPrefix+channelName)
 
   /**
