@@ -9,8 +9,8 @@ repositories {
 
 dependencies {
 	// Libraries needed to run the scala tools
-	scalaTools "org.scala-lang:scala-compiler:${scalaVersion}",
-	           "org.scala-lang:scala-library:${scalaVersion}"
+    compile "org.scala-lang:scala-compiler:${scalaVersion}"
+    compile "org.scala-lang:scala-library:${scalaVersion}"
 
 
 	// Libraries needed for scala api
