@@ -16,12 +16,9 @@ abstract class Connection {
 
   def dataHandler(connection: Connection)(buffer: Buffer) {
     val data = new Data(buffer)
-    println("channel :" + data.channel)
-    println("event : " + data.event)
-    println(data.dataJsonObject.toString)
     data.event match {
       case Event.SUBSCRIBE => Channel(data.channel).subscribe(connection, data.dataJsonObject)
-      case Event.UNSUBSCRIBE => Channel(data.channel).unsubscribe(connection)
+      case Event.UNSUBSCRIBE => {Channel(data.channel).unsubscribe(connection)}
       case Event.PING =>  {
         connection.sendTextFrame(Event.pong.toString)
       }
@@ -29,17 +26,18 @@ abstract class Connection {
         connection.sendTextFrame(Event.ping.toString)
       }
       case Event.CLIENT_EVENT(c) => {
+        println("CLIENT EVENT")
         val channel=Channel(data.channel)
-        if(channel.isClientTriggerEnabled) {
+        //if(channel.isClientTriggerEnabled) {
           channel.publishEvent(data.event, data.dataJsonObject)
-        }
+        //}
       }
       case _ => {
       }
     }
   }
-
   def closeHandler(socketId: String)(void:Void) {
+
     ConnectionManager.disconnect(socketId)
   }
 }

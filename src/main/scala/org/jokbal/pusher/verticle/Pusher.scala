@@ -1,7 +1,7 @@
 package org.jokbal.pusher.verticle
 
 import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.eventbus.{MessageData, EventBus}
+import org.vertx.scala.core.eventbus.EventBus
 import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
 import org.jokbal.pusher.util.WrappedEventBus
@@ -22,7 +22,7 @@ object Pusher{
 
   def init(config:JsonObject,eventBus:EventBus,sharedData:SharedData)
   {
-    Pusher.port = config.getInteger("port",8080)
+    Pusher.port = config.getInteger("port",8000)
     Pusher.eventBus_prefix = config.getString("eventbus_prefix","Pusher::")
     Pusher.eventBus = new  WrappedEventBus(eventBus_prefix,eventBus)
     Pusher.sharedData_prefix = config.getString("sharedData_prefix",Pusher.eventBus_prefix)
@@ -39,8 +39,7 @@ class Pusher extends Verticle {
   override def start() {
     val config = container.config()
     Pusher.init(config,vertx.eventBus,vertx.sharedData)
-    container.deployVerticle("scala:org.jokbal.pusher.verticle.SocketServer",config)
+    container.deployVerticle("scala:org.jokbal.pusher.verticle.SocketServer",config, 5)
     container.deployVerticle("scala:org.jokbal.pusher.verticle.HttpServerVerticle",config)
-
   }
 }
