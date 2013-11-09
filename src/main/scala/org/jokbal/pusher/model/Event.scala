@@ -12,6 +12,5 @@ object Event{
   def memberAdded[T](channel:String,data:T)=Event("pusher_internal:member_added",channel,data.toString)
   def memberRemoved[T](channel:String,data:T)=Event("pusher_internal:member_removed",channel,data.toString)
 
-
   def internalAuth(socketid:String,channel:String,auth:String)=Event("Internal:subscribeAuth",Json.obj("socketid"->socketid,"channel"->channel,"auth"->auth))
 }

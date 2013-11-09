@@ -31,7 +31,7 @@ object Pusher{
     Pusher.ExternalCommandChannel =config.getString("commandChannel","pusher_command")
     Pusher.authorizationChannel = config.getString("authorizationChannel","pusher_auth")
     Pusher.redis_enable =config.getBoolean("redis_enable",false)
-    val redis_config = config.getObject("redis_config")
+    val redis_config = config.getObject("redis_config",Json.emptyObj())
     Pusher.redis_address = redis_config.getString("address")
   }
 
