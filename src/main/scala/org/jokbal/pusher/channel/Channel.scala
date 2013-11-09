@@ -53,6 +53,18 @@ object  Channel{
   }
 
   /**
+   * unsubscribe channel
+   * @param connection the connection that try to unsubscribe
+   * @param channelName name of channel
+   */
+  def unsubscribeAll(connection:Connection)
+  {
+    for(channel<-channelMap)
+      channel._2.unsubscribe(connection)
+  }
+
+
+  /**
    * publish event to event bus
    * @param data the wrapped event data
    */
