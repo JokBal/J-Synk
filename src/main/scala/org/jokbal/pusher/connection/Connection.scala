@@ -28,11 +28,13 @@ abstract class Connection {
       case Event.PONG => {
         connection.sendTextFrame(Event.ping.toString)
       }
-      case Event.CLIENT_EVENT => {
+      case Event.CLIENT_EVENT(c) => {
         val channel=Channel(data.channel)
         if(channel.isClientTriggerEnabled) {
           channel.publishEvent(data.event, data.dataJsonObject)
         }
+      }
+      case _ => {
       }
     }
   }

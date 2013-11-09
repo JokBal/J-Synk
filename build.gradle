@@ -19,7 +19,7 @@ dependencies {
 }
 
 test {
-    jvmArgs "-XX:MaxPermSize=256m"
+    jvmArgs "-XX:MaxPermSize=1024m"
     systemProperty 'vertx.test.resources', 'src/test/script'
 }
 
