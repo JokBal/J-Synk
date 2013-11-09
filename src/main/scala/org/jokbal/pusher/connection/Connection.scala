@@ -7,7 +7,6 @@ import org.vertx.scala.core.FunctionConverters._
 import java.util.UUID
 import org.jokbal.pusher.model.{Event, Data}
 import org.jokbal.pusher.channel.Channel
-import org.vertx.java.core.json.JsonObject
 
 abstract class Connection {
   val socketId = UUID.randomUUID().toString
@@ -26,25 +25,24 @@ abstract class Connection {
         connection.sendTextFrame(Event.ping.toString)
       }
       case Event.CLIENT_EVENT(c) => {
-        println("CLIENT EVENT")
-        val channel=Channel(data.channel)
-        //if(channel.isClientTriggerEnabled) {
+        val channel = Channel(data.channel)
+        if(channel.isClientTriggerEnabled) {
           channel.publishEvent(data.event, data.dataJsonObject)
-        //}
+        }
       }
       case _ => {
       }
     }
   }
-  def closeHandler(socketId: String)(void:Void) {
-
-    ConnectionManager.disconnect(socketId)
+  def closeHandler(connection: Connection)(void:Void) {
+    Channel.unsubscribeAll(connection)
+    ConnectionManager.disconnect(connection.socketId)
   }
 }
 
 class WebSocketConnection(socket: ServerWebSocket) extends Connection {
   socket.dataHandler(dataHandler(this) _)
-  socket.closeHandler(closeHandler(socketId) _)
+  socket.closeHandler(closeHandler(this) _)
   def sendTextFrame(str: String) {
     socket.writeTextFrame(str)
   }
