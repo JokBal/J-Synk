@@ -2,7 +2,7 @@ package org.jokbal.pusher.http
 
 import org.vertx.scala.core.http.HttpServerRequest
 import org.jokbal.pusher.sharedstore.ChannelData
-import org.jokbal.pusher.channel.sharedstore.SharedStore
+import org.jokbal.pusher.sharedstore.SharedStore
 import org.vertx.scala.core.json.{JsonObject, JsonArray}
 
 class ChannelTrigger{

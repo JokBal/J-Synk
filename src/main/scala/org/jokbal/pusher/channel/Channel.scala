@@ -16,8 +16,6 @@ import org.jokbal.pusher.verticle.Pusher
  */
 
 object  Channel{
-  var channelPrefix=""
-  var eventBus:EventBus=null
 
   val channelMap = mutable.HashMap[String,Channel]()
 
@@ -63,6 +61,11 @@ object  Channel{
       channel._2.unsubscribe(connection)
   }
 
+  def disconnectConnection(connection:Connection){
+    for(channel<-channelMap)
+      channel._2.disconnect(connection)
+  }
+
 
   /**
    * publish event to event bus
@@ -76,6 +79,7 @@ object  Channel{
 abstract class Channel{
   def subscribe(connection:Connection,data:JsonObject){}
   def unsubscribe(connection:Connection){}
+  def disconnect(connection:Connection)
   def publishEvent[T](event:String,data:T):Boolean
   def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject){}
   def isClientTriggerEnabled:Boolean

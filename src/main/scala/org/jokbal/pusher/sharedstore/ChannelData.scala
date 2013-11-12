@@ -1,6 +1,5 @@
 package org.jokbal.pusher.sharedstore
 
-import org.jokbal.pusher.channel.sharedstore.SharedStore
 import org.vertx.scala.core.json._
 
 /**

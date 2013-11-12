@@ -18,15 +18,13 @@ class BaseChannel(val channelName:String) extends Channel{
   // the connections that subscribe this channel
   val connections = mutable.Buffer[Connection]()
   Pusher.eventBus.registerHandler(channelName,handleEvent _)
- println("register Handler on "+Channel.channelPrefix+channelName)
 
   /**
    * subscribe this channel
    * @param connection the connection that try to subscribe this channel
    * @param data information for subscribe
    */
-  override def subscribe(connection:Connection, data:JsonObject)
-  {
+  override def subscribe(connection:Connection, data:JsonObject){
     sendSubscribeSucceededMessage(connection,new JsonObject)
     connections+=connection
   }
@@ -35,17 +33,19 @@ class BaseChannel(val channelName:String) extends Channel{
    * unsubscribe this channel
    * @param connection the connection that try to unsubscribe
    */
-  override def unsubscribe(connection:Connection)
-  {
+  override def unsubscribe(connection:Connection){
     connections-=connection
+  }
+
+  def disconnect(connection:Connection){
+    unsubscribe(connection)
   }
 
   /**
    * publish event from event bus to all of connections that subscribe this channel
    * @param msg the eventbus message that contains content of this event
    */
-  def handleEvent(msg:Message[String])
-  {
+  def handleEvent(msg:Message[String]){
     handleEvent(msg.body)
   }
 
@@ -53,8 +53,7 @@ class BaseChannel(val channelName:String) extends Channel{
    * publish event to all of connections that subscribe this channel
    * @param event the content of this event
    */
-  def handleEvent(event:String)
-  {
+  def handleEvent(event:String){
     println("Event Handled event = "+event.toString)
     for(connection <- connections)
     {
@@ -68,8 +67,7 @@ class BaseChannel(val channelName:String) extends Channel{
    * @param data content of this event
    * @return true is success to publish. false is not allowed to publish
    */
-  override def publishEvent[T](event:String,data:T):Boolean=
-  {
+  override def publishEvent[T](event:String,data:T):Boolean={
     publishEvent(Event(event,channelName,data).toString)
   }
 
@@ -78,14 +76,12 @@ class BaseChannel(val channelName:String) extends Channel{
    * @param data the wrapped event data
    * @return true is success to publish. false is not allowed to publish
    */
-  def publishEvent(data:String):Boolean=
-  {
+  def publishEvent(data:String):Boolean={
     Channel.publishEvent(channelName,data)
     true
   }
 
-  override def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject=Json.emptyObj())
-  {
+  override def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject=Json.emptyObj()){
     connection.sendTextFrame(Event.subscribeSuccess(channelName,data).toString)
   }
 

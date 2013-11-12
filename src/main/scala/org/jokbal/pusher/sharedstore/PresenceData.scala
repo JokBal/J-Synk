@@ -1,4 +1,4 @@
-package org.jokbal.pusher.channel.sharedstore
+package org.jokbal.pusher.sharedstore
 
 import org.vertx.scala.core.json._
 

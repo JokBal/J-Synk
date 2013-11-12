@@ -1,8 +1,7 @@
-package org.jokbal.pusher.channel.sharedstore
+package org.jokbal.pusher.sharedstore
 
 
-import org.vertx.scala.core.json.{Json,JsonObject,JsonArray}
-import org.jokbal.pusher.sharedstore.ChannelData
+import org.vertx.scala.core.json.{JsonObject,JsonArray}
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +16,8 @@ object SharedStore {
     sharedStore = RedisStore
   }
   def presenceData(channelName:String) = new PresenceData(channelName,sharedStore)
-  def channelData = new ChannelData(sharedStore)
+  lazy val channelData = new ChannelData(sharedStore)
+  lazy val permanentData = new PermanentData
 }
 
 class SharedStore{
