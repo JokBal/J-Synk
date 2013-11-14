@@ -12,7 +12,7 @@ import org.vertx.scala.core.json._
 class PresenceData(val channelName:String, val sharedStore:SharedStore){
 
   def addMember[T](id:String,info:JsonObject){
-    sharedStore.hset(channelName,id->info.toString)
+    sharedStore.hset(channelName,id->(info.toString))
   }
   def removeMember(key:String){
     sharedStore.hdel(channelName,key)

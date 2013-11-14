@@ -13,7 +13,7 @@ object Event{
 
   def apply[T](event:String,data:T)=Json.obj("event"->event,"data"->data)
   def apply[T](event:String,channel:String,data:T)=Json.obj("event"->event,"channel"->channel,"data"->data)
-  def established(socketId:String)=Event("pusher:connection_established",Json.obj("socket_id"->socketId))
+  def established(socketId:String)=Event("pusher:connection_established",Json.obj("socket_id"->socketId).toString)
   def error[T](message:String,code:Int)=Event("pusher:error",Json.obj("message"->message,"code"->code))
   def subscribeSuccess[T](channel:String,data:T)=Event("pusher_internal:subscription_succeeded",channel,data.toString)
   def memberAdded[T](channel:String,data:T)=Event("pusher_internal:member_added",channel,data.toString)

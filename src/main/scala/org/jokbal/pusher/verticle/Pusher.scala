@@ -5,6 +5,7 @@ import org.vertx.scala.core.eventbus.EventBus
 import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
 import org.jokbal.pusher.util.WrappedEventBus
+import org.jokbal.pusher.sharedstore.SharedStore
 
 object Pusher{
   var apikey = ""
@@ -32,11 +33,14 @@ object Pusher{
     port = config.getInteger("port",8000)
     eventBus_prefix = config.getString("eventbus_prefix","Pusher::")
     eventBus = new  WrappedEventBus(eventBus_prefix,eb)
+    this.sharedData=sharedData
     sharedData_prefix = config.getString("sharedData_prefix",Pusher.eventBus_prefix)
     external_address =config.getString("commandChannel","pusher_command")
     authorizationChannel = config.getString("authorizationChannel","pusher_auth")
 
     redis_enabled =config.getBoolean("redis_enable",false)
+    if(redis_enabled) SharedStore.enableRedis()
+
     redis_config = config.getObject("redis_config",Json.emptyObj())
     redis_address = redis_config.getString("address")
 

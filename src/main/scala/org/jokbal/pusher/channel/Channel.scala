@@ -27,9 +27,15 @@ object  Channel{
 
   private val privatePattern = "(private-.*)".r
   private val presencePattern = "(presence-.*)".r
+  private val permanentPattern = "(permanent-.*)".r
 
   private def makeChannel(channelName:String)={
     val channel = channelName match{
+
+      case Channel.permanentPattern(c) =>{
+        println("private channel Created")
+        new BaseChannel(channelName) with PermanentChannel with PrivateChannel
+      }
       case Channel.privatePattern(c) =>{
         //private channel
         println("private channel Created")

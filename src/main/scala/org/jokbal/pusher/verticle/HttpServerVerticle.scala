@@ -11,8 +11,5 @@ class HttpServerVerticle extends Verticle{
     val test = new HttpServerManager(vertx,conf)
     test.startServer
     println("Succeed to start Http Server Verticle")
-
   }
-
-
 }
