@@ -55,7 +55,7 @@ trait GetChannels{
 
     json.putObject("channels",channels)
     responseMessage = json.toString
-    println(responseCode + " : " + responseCode)
+    //println(responseCode + " : " + responseCode)
     return true
 
   }
@@ -129,7 +129,7 @@ trait GetChannel extends GetChannels{
     }
 
     responseMessage = getInfo(attrs,channelName).toString
-    println(responseCode + " : " + responseMessage)
+    //println(responseCode + " : " + responseMessage)
     return true
 
   }
@@ -183,7 +183,7 @@ trait GetUsers{
       })
       json.putArray("users",users)
       responseMessage = json.toString
-      println(responseCode + " : " + responseCode)
+      //println(responseCode + " : " + responseCode)
       return true
     }
 
