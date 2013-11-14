@@ -54,9 +54,11 @@ class BaseChannel(val channelName:String) extends Channel{
    * @param event the content of this event
    */
   def handleEvent(event:String){
-    println("Event Handled event = "+event.toString)
+    println("Event Handled event = " + event.toString)
+
     for(connection <- connections)
     {
+      println(connection.socketId)
       connection.sendTextFrame(event.toString)
     }
   }

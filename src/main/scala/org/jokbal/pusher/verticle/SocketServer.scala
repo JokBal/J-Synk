@@ -3,6 +3,8 @@ package org.jokbal.pusher.verticle
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.http.ServerWebSocket
 import org.jokbal.pusher.connection.{WebSocketConnection, ConnectionManager}
+import org.vertx.scala.core.json.JsonObject
+import java.util.UUID
 
 class SocketServer extends Verticle {
 

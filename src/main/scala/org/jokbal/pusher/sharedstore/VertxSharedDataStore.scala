@@ -3,6 +3,7 @@ package org.jokbal.pusher.sharedstore
 import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
 import scala.collection.JavaConversions
+import org.jokbal.pusher.verticle.Pusher
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,8 @@ import scala.collection.JavaConversions
  * To change this template use File | Settings | File Templates.
  */
 object VertxSharedDataStore extends SharedStore{
-  var sharedData:SharedData=null
+
+  lazy val sharedData:SharedData = Pusher.sharedData
   override def hset(hashName:String,values:(String, String)*){
     val map = JavaConversions.mapAsScalaConcurrentMap[String,String](sharedData.getMap(hashName))
     for(tuple<-values){

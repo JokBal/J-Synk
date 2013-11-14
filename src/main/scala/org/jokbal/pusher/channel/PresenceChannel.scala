@@ -19,7 +19,7 @@ trait PresenceChannel extends BaseChannel{
   val presenceStore = SharedStore.presenceData(channelName)
 
   override def subscribe(connection:Connection,data:JsonObject){
-    val channel_data= data.getObject("channel_data")
+    val channel_data= new JsonObject(data.getString("channel_data"))
     addMember(connection,channel_data)
     super.subscribe(connection,data)
   }
@@ -37,6 +37,7 @@ trait PresenceChannel extends BaseChannel{
   {
     val id = data.getString("user_id")
     val info = data.getObject("user_info")
+
     presenceStore.addMember(id,info)
     userIdMap+=connection->id
     publishEvent(Event.memberAdded(channelName,data).toString)
@@ -44,6 +45,7 @@ trait PresenceChannel extends BaseChannel{
 
   def removeMember(connection:Connection)
   {
+    println(userIdMap.toString())
     val data =Json.fromObjectString((userIdMap get connection).get)
     presenceStore.removeMember(data.getString("user_id"))
     publishEvent(Event.memberRemoved(channelName,data).toString)
@@ -62,6 +64,6 @@ trait PresenceChannel extends BaseChannel{
   }
 
   override def signature(connection:Connection,data:JsonObject)=
-    connection.socketId+":"+channelName+":"+data.getObject("channel_data").toString
+    connection.socketId+":"+channelName+":"+ new JsonObject(data.getString("channel_data")).toString
 
 }

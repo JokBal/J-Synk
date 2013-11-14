@@ -41,8 +41,10 @@ abstract class Connection {
 }
 
 class WebSocketConnection(socket: ServerWebSocket) extends Connection {
+
   socket.dataHandler(dataHandler(this) _)
   socket.closeHandler(closeHandler(this) _)
+
   def sendTextFrame(str: String) {
     socket.writeTextFrame(str)
   }

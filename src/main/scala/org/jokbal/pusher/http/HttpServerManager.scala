@@ -58,6 +58,7 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
         if(trigger.get(req)){
           req.response().setStatusCode(trigger.getCode)
             .setStatusMessage(trigger.getMessage).end()
+          println(trigger.getMessage)
         }else{
           req.response().setStatusCode(trigger.getCode)
             .setStatusMessage(trigger.getMessage).end()
