@@ -6,6 +6,7 @@ import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
 import org.jokbal.pusher.util.WrappedEventBus
 import org.jokbal.pusher.sharedstore.SharedStore
+import org.vertx.scala.core.eventbus.Message
 
 object Pusher{
   var apikey = ""
@@ -33,6 +34,7 @@ object Pusher{
     port = config.getInteger("port",8000)
     eventBus_prefix = config.getString("eventbus_prefix","Pusher::")
     eventBus = new  WrappedEventBus(eventBus_prefix,eb)
+
     this.sharedData=sharedData
     sharedData_prefix = config.getString("sharedData_prefix",Pusher.eventBus_prefix)
     external_address =config.getString("commandChannel","pusher_command")
@@ -61,5 +63,7 @@ class Pusher extends Verticle {
     container.deployModule("io.vertx~mod-redis~1.1.3",Pusher.redis_config)
     container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",Pusher.mongodb_config)
     container.deployModule("ashertarno~vertx-gcm~2.0.0",Pusher.gcm_config)
+
+
   }
 }

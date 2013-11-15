@@ -6,9 +6,17 @@ import org.vertx.scala.core.json.{Json, JsonObject}
 class Data(buffer: Buffer) {
   val jsonObject: JsonObject = new JsonObject(buffer.toString())
   val dataJsonObject: JsonObject = jsonObject.getObject("data",Json.emptyObj())
-  val channelDataObject : JsonObject = Json.fromObjectString(dataJsonObject.getString("channel_data"))
-  var channel: String = dataJsonObject.getString("channel")
+
+  var channelDataObject : JsonObject = null
+
+  try{
+    channelDataObject = new JsonObject(dataJsonObject.getString("channel_data"))
+  }catch{
+    case e : Exception => channelDataObject = Json.emptyObj()
+  }
+
   val auth: String = dataJsonObject.getString("auth")
+  var channel: String = dataJsonObject.getString("channel")
   val event: String = jsonObject.getString("event")
 
   if(channel == null) {

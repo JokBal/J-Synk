@@ -3,8 +3,7 @@ package org.jokbal.pusher.verticle
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.http.ServerWebSocket
 import org.jokbal.pusher.connection.{WebSocketConnection, ConnectionManager}
-import org.vertx.scala.core.json.JsonObject
-import java.util.UUID
+import org.vertx.scala.core.eventbus.Message
 
 class SocketServer extends Verticle {
 
@@ -12,6 +11,7 @@ class SocketServer extends Verticle {
 
     val conf = container.config()
     Pusher.init(conf,vertx.eventBus,vertx.sharedData)
+
     vertx.createHttpServer().websocketHandler(
     {
       socket:ServerWebSocket => {

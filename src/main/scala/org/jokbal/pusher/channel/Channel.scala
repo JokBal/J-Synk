@@ -33,7 +33,7 @@ object  Channel{
     val channel = channelName match{
 
       case Channel.permanentPattern(c) =>{
-        println("private channel Created")
+        println("permanent channel Created")
         new BaseChannel(channelName) with PermanentChannel with PrivateChannel
       }
       case Channel.privatePattern(c) =>{
