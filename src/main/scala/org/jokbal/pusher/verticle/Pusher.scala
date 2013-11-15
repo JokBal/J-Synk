@@ -4,7 +4,6 @@ import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.eventbus.EventBus
 import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
-import org.jokbal.pusher.util.WrappedEventBus
 import org.jokbal.pusher.sharedstore.SharedStore
 
 object Pusher{
@@ -25,14 +24,14 @@ object Pusher{
   var mongodb_address:String=null
   var mongodb_config:JsonObject=null
 
-  var eventBus:WrappedEventBus=null
+  var eventBus:EventBus=null
   var sharedData:SharedData=null
 
   def init(config:JsonObject,eb:EventBus,sharedData:SharedData)
   {
     port = config.getInteger("port",8000)
     eventBus_prefix = config.getString("eventbus_prefix","Pusher::")
-    eventBus = new  WrappedEventBus(eventBus_prefix,eb)
+    eventBus = eb
     this.sharedData=sharedData
     sharedData_prefix = config.getString("sharedData_prefix",Pusher.eventBus_prefix)
     external_address =config.getString("commandChannel","pusher_command")
@@ -57,9 +56,9 @@ class Pusher extends Verticle {
     val config = container.config()
     Pusher.init(config,vertx.eventBus,vertx.sharedData)
     container.deployVerticle("scala:org.jokbal.pusher.verticle.SocketServer",config, 5)
-    container.deployVerticle("scala:org.jokbal.pusher.verticle.HttpServerVerticle",config)
-    container.deployModule("io.vertx~mod-redis~1.1.3",Pusher.redis_config)
-    container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",Pusher.mongodb_config)
-    container.deployModule("ashertarno~vertx-gcm~2.0.0",Pusher.gcm_config)
+    container.deployVerticle("scala:org.jokbal.pusher.verticle.HttpServerVerticle",config,3)
+    //container.deployModule("io.vertx~mod-redis~1.1.3",Pusher.redis_config)
+    //container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",Pusher.mongodb_config)
+    //container.deployModule("ashertarno~vertx-gcm~2.0.0",Pusher.gcm_config)
   }
 }

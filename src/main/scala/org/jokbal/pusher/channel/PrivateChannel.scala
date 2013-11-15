@@ -11,7 +11,7 @@ import org.jokbal.pusher.util.Encryption
  * Time: 오후 8:49
  * To change this template use File | Settings | File Templates.
  */
-trait PrivateChannel extends BaseChannel{
+trait PrivateChannel extends Channel{
   // the auth data for this channel on whole Verticle
   //val authMap = mutable.HashMap[String,JsonObject]()
   override def subscribe(connection:Connection,data:JsonObject){

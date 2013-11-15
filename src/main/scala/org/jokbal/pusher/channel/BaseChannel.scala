@@ -16,8 +16,8 @@ import org.jokbal.pusher.verticle.Pusher
  */
 class BaseChannel(val channelName:String) extends Channel{
   // the connections that subscribe this channel
-  val connections = mutable.Buffer[Connection]()
-  Pusher.eventBus.registerHandler(channelName,handleEvent _)
+  val connections = new mutable.Buffer[Connection] with mutable.SynchronizedBuffer[Connection]
+  Pusher.eventBus.registerHandler(Pusher.eventBus_prefix+channelName,handleEvent _)
 
   /**
    * subscribe this channel
@@ -40,45 +40,21 @@ class BaseChannel(val channelName:String) extends Channel{
   def disconnect(connection:Connection){
     unsubscribe(connection)
   }
-
-  /**
-   * publish event from event bus to all of connections that subscribe this channel
-   * @param msg the eventbus message that contains content of this event
-   */
   def handleEvent(msg:Message[String]){
     handleEvent(msg.body)
   }
 
-  /**
-   * publish event to all of connections that subscribe this channel
-   * @param event the content of this event
-   */
   def handleEvent(event:String){
-    println("Event Handled event = " + event.toString)
+    //println("Event Handled event = " + event.toString)
 
     for(connection <- connections)
     {
-      println(connection.socketId)
+      //println(connection.socketId)
       connection.sendTextFrame(event.toString)
     }
   }
 
-  /**
-   * publish event to event bus
-   * @param event the name of event
-   * @param data content of this event
-   * @return true is success to publish. false is not allowed to publish
-   */
-  override def publishEvent[T](event:String,data:T):Boolean={
-    publishEvent(Event(event,channelName,data).toString)
-  }
-
-  /**
-   * publish event to event bus
-   * @param data the wrapped event data
-   * @return true is success to publish. false is not allowed to publish
-   */
-  def publishEvent(data:String):Boolean={
+  override def publishEvent(data:String):Boolean={
     Channel.publishEvent(channelName,data)
     true
   }

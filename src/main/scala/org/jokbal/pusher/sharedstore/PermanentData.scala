@@ -17,13 +17,13 @@ class PermanentData {
   def insertMobile(channel:String,mobileKey:String){
     val data = Json.obj("channel"->channel,"mobile"->mobileKey)
     val request = Json.obj("action"->"insert","collection"->PERMANENT_TABLE,"document"->data)
-    Pusher.eventBus.internal.send(Pusher.mongodb_address,request,handleResult _)
+    Pusher.eventBus.send(Pusher.mongodb_address,request,handleResult _)
   }
 
   def deleteMobile(channel:String,mobileKey:String){
     val data = Json.obj("channel"->channel,"mobile"->mobileKey)
     val request = Json.obj("action"->"delete","collection"->PERMANENT_TABLE,"matcher"->data)
-    Pusher.eventBus.internal.send(Pusher.mongodb_address,request,handleResult _)
+    Pusher.eventBus.send(Pusher.mongodb_address,request,handleResult _)
   }
 
   def getMobile(channel:String,callback:JsonArray=>Unit){
@@ -35,7 +35,7 @@ class PermanentData {
         error(msg.body.getString("message"));return
       callback(msg.body.getArray("results"))
     }
-    Pusher.eventBus.internal.send(Pusher.mongodb_address,request,resultCallback _)
+    Pusher.eventBus.send(Pusher.mongodb_address,request,resultCallback _)
   }
 
   def handleResult(msg:Message[JsonObject]){

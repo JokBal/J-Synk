@@ -10,6 +10,7 @@ import org.vertx.scala.core.json._
  * To change this template use File | Settings | File Templates.
  */
 class ChannelData(val sharedStore:SharedStore) {
+
   def publicChannels(callback:JsonArray=>Unit){
     sharedStore.smembers("public_channels",callback)
   }

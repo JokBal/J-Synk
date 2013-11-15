@@ -21,7 +21,7 @@ object RedisStore extends SharedStore{
       args.addString(tuple._2)
     }
     val command = Json.obj("command"->"hset","args"->args)
-    Pusher.eventBus.internal.send(redisAddress,command)
+    Pusher.eventBus.send(redisAddress,command)
   }
   override def hdel(hashName:String,keys:String*){
     val args = Json.arr(hashName)
@@ -29,7 +29,7 @@ object RedisStore extends SharedStore{
       args.addString(key)
     }
     val command = Json.obj("command"->"hdel","args"->args)
-    Pusher.eventBus.internal.send(redisAddress,command)
+    Pusher.eventBus.send(redisAddress,command)
   }
   override def sadd(setName:String,values:String*){
     val args = Json.arr(setName)
@@ -37,7 +37,7 @@ object RedisStore extends SharedStore{
       args.addString(value)
     }
     val command = Json.obj("command"->"sadd","args"->args)
-    Pusher.eventBus.internal.send(redisAddress,command)
+    Pusher.eventBus.send(redisAddress,command)
   }
   override def srem(setName:String,values:String*){
     val args = Json.arr(setName)
@@ -45,12 +45,12 @@ object RedisStore extends SharedStore{
       args.addString(value)
     }
     val command = Json.obj("command"->"srem","args"->args)
-    Pusher.eventBus.internal.send(redisAddress,command)
+    Pusher.eventBus.send(redisAddress,command)
   }
   override def hgetall(hashName:String,callback:(JsonObject)=>Unit){
     val args = Json.arr(hashName)
     val command = Json.obj("command"->"hgetall","args"->args)
-    Pusher.eventBus.internal.send[JsonObject](redisAddress,command,
+    Pusher.eventBus.send[JsonObject](redisAddress,command,
     {msg:Message[JsonObject] =>
       callback(msg.body.getObject("value"))
     })
@@ -58,7 +58,7 @@ object RedisStore extends SharedStore{
   override def hlen(hashName:String,callback:Int=>Unit){
     val args = Json.arr(hashName)
     val command = Json.obj("command"->"hlen","args"->args)
-    Pusher.eventBus.internal.send[JsonObject](redisAddress,command,
+    Pusher.eventBus.send[JsonObject](redisAddress,command,
     {msg:Message[JsonObject] =>
       callback(msg.body.getInteger("value"))
     })
@@ -66,7 +66,7 @@ object RedisStore extends SharedStore{
   override def smembers(setName:String,callback:(JsonArray)=>Unit){
     val args = Json.arr(setName)
     val command = Json.obj("command"->"smembers","args"->args)
-    Pusher.eventBus.internal.send[JsonObject](redisAddress,command,
+    Pusher.eventBus.send[JsonObject](redisAddress,command,
     {msg:Message[JsonObject] =>
       callback(msg.body.getArray("value"))
     })
@@ -74,7 +74,7 @@ object RedisStore extends SharedStore{
   override def sunion(callback:(JsonArray)=>Unit,setNames:String*){
     val args = Json.arr(setNames)
     val command = Json.obj("command"->"sunion","args"->args)
-    Pusher.eventBus.internal.send[JsonObject](redisAddress,command,
+    Pusher.eventBus.send[JsonObject](redisAddress,command,
     {msg:Message[JsonObject] =>
       callback(msg.body.getArray("value"))
     })

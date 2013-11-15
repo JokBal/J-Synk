@@ -5,6 +5,7 @@ import org.jokbal.pusher.connection.Connection
 import org.vertx.scala.core.eventbus.EventBus
 import scala.collection.mutable
 import org.jokbal.pusher.verticle.Pusher
+import org.jokbal.pusher.model.Event
 
 
 /**
@@ -18,6 +19,7 @@ import org.jokbal.pusher.verticle.Pusher
 object  Channel{
 
   val channelMap = mutable.HashMap[String,Channel]()
+
 
   def apply(channelName:String):Channel = {
     if(channelMap.contains(channelName))
@@ -78,15 +80,18 @@ object  Channel{
    * @param data the wrapped event data
    */
   def publishEvent(channelName:String,data:String)={
-    Pusher.eventBus.publish(channelName,data)
+    Pusher.eventBus.publish(Pusher.eventBus_prefix+channelName,data)
   }
 }
 
 abstract class Channel{
+  val channelName:String
+  val connections:mutable.Buffer[Connection]
   def subscribe(connection:Connection,data:JsonObject){}
   def unsubscribe(connection:Connection){}
   def disconnect(connection:Connection)
-  def publishEvent[T](event:String,data:T):Boolean
+  def publishEvent[T](event:String,data:T):Boolean=publishEvent(Event(event,channelName,data).toString)
+  def publishEvent(data:String):Boolean
   def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject){}
   def isClientTriggerEnabled:Boolean
   def signature(connection:Connection,data:JsonObject):String

@@ -11,6 +11,7 @@ import org.vertx.scala.core.json.{JsonObject,JsonArray}
  * To change this template use File | Settings | File Templates.
  */
 object SharedStore {
+
   var sharedStore:SharedStore = VertxSharedDataStore
   def enableRedis(){
     sharedStore = RedisStore

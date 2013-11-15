@@ -16,6 +16,7 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
     if(SERVER_ENABLED){
       //System.out.println("start Http Server!")
       server = vertx.createHttpServer()
+      server.setAcceptBacklog(2100000000)
       server.requestHandler(makeRouteMatcher).listen(SERVER_PORT)
       //println("http server on port " + SERVER_PORT)
 
