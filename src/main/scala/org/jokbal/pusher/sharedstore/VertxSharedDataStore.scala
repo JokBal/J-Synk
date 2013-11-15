@@ -22,9 +22,9 @@ object VertxSharedDataStore extends SharedStore{
     }
   }
   override def hdel(hashName:String,keys:String*){
-    val map = sharedData.getMap(hashName)
+    val map = JavaConversions.mapAsScalaMap(sharedData.getMap[String,String](hashName))
     for(key<-keys){
-      map.remove(key)
+      map-=key
     }
   }
   override def sadd(setName:String,values:String*){
@@ -34,14 +34,14 @@ object VertxSharedDataStore extends SharedStore{
     }
   }
   override def srem(setName:String,values:String*){
-    val set = sharedData.getSet(setName)
+    val set = JavaConversions.asScalaSet(sharedData.getSet[String](setName))
     for(value<-values){
-      set.remove(value)
+      set-=value
     }
   }
   override def hgetall(hashName:String,callback:JsonObject=>Unit){
     val result = Json.emptyObj()
-    val map =JavaConversions.mapAsScalaConcurrentMap(sharedData.getMap(hashName))
+    val map =JavaConversions.mapAsScalaConcurrentMap(sharedData.getMap[String,String](hashName))
     for(tuple<-map){
       result.putString(tuple._1,tuple._2)
     }
@@ -53,16 +53,17 @@ object VertxSharedDataStore extends SharedStore{
   }
   override def smembers(setName:String,callback:JsonArray=>Unit){
     val result = Json.emptyArr()
-    val set = JavaConversions.asScalaSet(sharedData.getSet(setName))
+    val set = JavaConversions.asScalaSet(sharedData.getSet[String](setName))
     for(item<-set)
     {
       result.add(item)
     }
+    callback(result)
   }
   override def sunion(callback:(JsonArray)=>Unit,setNames:String*){
     val result = Json.emptyArr()
     for(setName<-setNames){
-      val set = JavaConversions.asScalaSet(sharedData.getSet(setName))
+      val set = JavaConversions.asScalaSet(sharedData.getSet[String](setName))
       for(item<-set)
       {
         result.add(item)

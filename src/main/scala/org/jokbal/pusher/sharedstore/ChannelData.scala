@@ -10,6 +10,15 @@ import org.vertx.scala.core.json._
  * To change this template use File | Settings | File Templates.
  */
 class ChannelData(val sharedStore:SharedStore) {
+  def addPublicChannels(channelName:String){
+    sharedStore.sadd("public_channels",channelName)
+  }
+  def addPrivateChannels(channelName:String){
+    sharedStore.sadd("private_channels",channelName)
+  }
+  def addPresenceChannels(channelName:String){
+    sharedStore.sadd("presence_channels",channelName)
+  }
   def publicChannels(callback:JsonArray=>Unit){
     sharedStore.smembers("public_channels",callback)
   }

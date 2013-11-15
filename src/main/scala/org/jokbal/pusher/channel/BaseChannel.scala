@@ -58,8 +58,12 @@ class BaseChannel(val channelName:String) extends Channel{
 
     for(connection <- connections)
     {
-      println(connection.socketId)
+      try{
       connection.sendTextFrame(event.toString)
+      }catch{
+        case e : Exception =>
+          disconnect(connection)
+      }
     }
   }
 
@@ -79,6 +83,7 @@ class BaseChannel(val channelName:String) extends Channel{
    * @return true is success to publish. false is not allowed to publish
    */
   def publishEvent(data:String):Boolean={
+
     Channel.publishEvent(channelName,data)
     true
   }

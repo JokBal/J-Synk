@@ -5,6 +5,7 @@ import org.jokbal.pusher.connection.Connection
 import org.vertx.scala.core.eventbus.EventBus
 import scala.collection.mutable
 import org.jokbal.pusher.verticle.Pusher
+import org.jokbal.pusher.sharedstore.SharedStore
 
 
 /**
@@ -34,16 +35,19 @@ object  Channel{
 
       case Channel.permanentPattern(c) =>{
         println("permanent channel Created")
+        SharedStore.channelData.addPublicChannels(channelName)
         new BaseChannel(channelName) with PermanentChannel with PrivateChannel
       }
       case Channel.privatePattern(c) =>{
         //private channel
         println("private channel Created")
+        SharedStore.channelData.addPrivateChannels(channelName)
         new BaseChannel(channelName) with PrivateChannel
       }
       case Channel.presencePattern(c) => {
-        //presence channel with redis
+        //presence channel
         println("presence channel Created")
+        SharedStore.channelData.addPresenceChannels(channelName)
         new BaseChannel(channelName)  with PresenceChannel with PrivateChannel
       }
       case _ =>{

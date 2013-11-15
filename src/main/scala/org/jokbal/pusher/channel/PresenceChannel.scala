@@ -46,8 +46,14 @@ trait PresenceChannel extends BaseChannel{
   def removeMember(connection:Connection)
   {
     println(userIdMap.toString())
-    val data =Json.fromObjectString((userIdMap get connection).get)
-    presenceStore.removeMember(data.getString("user_id"))
+    val data =userIdMap get connection
+    if(data.isEmpty){
+      println(connection.toString)
+      return
+    }
+    val id =data.get
+
+    presenceStore.removeMember(id)
     publishEvent(Event.memberRemoved(channelName,data).toString)
     userIdMap-=connection
   }
