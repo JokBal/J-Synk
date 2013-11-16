@@ -17,7 +17,8 @@ import org.jokbal.pusher.verticle.Pusher
 class BaseChannel(val channelName:String) extends Channel{
   // the connections that subscribe this channel
   val connections = mutable.Buffer[Connection]()
-  Pusher.eventBus.registerHandler(channelName,handleEvent _)
+
+  Pusher.eventBus.registerHandler(Pusher.eventBus_prefix + channelName,handleEvent _)
 
   /**
    * subscribe this channel
@@ -54,12 +55,14 @@ class BaseChannel(val channelName:String) extends Channel{
    * @param event the content of this event
    */
   def handleEvent(event:String){
-    println("Event Handled event = " + event.toString)
+    //println("Event Handled event = " + event.toString)
 
-    for(connection <- connections)
+    val send_connections = connections.par
+    for(connection <- send_connections)
     {
       try{
-      connection.sendTextFrame(event.toString)
+
+        connection.sendTextFrame(event.toString)
       }catch{
         case e : Exception =>
           disconnect(connection)

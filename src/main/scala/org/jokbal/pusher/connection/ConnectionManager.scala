@@ -8,13 +8,17 @@ object ConnectionManager {
   val connections = mutable.HashMap[String, Connection]()
 
   def connect(connection: Connection) {
+    println(connection.socketId + " connected")
     connection.sendTextFrame(Event.established(connection.socketId).toString)
     connections += connection.socketId->connection
-    println(connection.socketId + "connect")
+
+
   }
 
   def disconnect(socketId: String) {
+    println(socketId + " disconnected")
     connections -= socketId
+
   }
 
 }

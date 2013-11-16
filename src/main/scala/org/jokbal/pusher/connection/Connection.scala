@@ -26,9 +26,10 @@ abstract class Connection {
       }
       case Event.CLIENT_EVENT(c) => {
         val channel = Channel(data.channel)
-        if(channel.isClientTriggerEnabled) {
+        //if(channel.isClientTriggerEnabled) {
+          println("Client Event is triggered" + data.channel)
           channel.publishEvent(data.event, data.dataJsonObject)
-        }
+        //}
       }
       case _ => {
       }

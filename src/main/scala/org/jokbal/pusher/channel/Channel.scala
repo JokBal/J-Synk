@@ -35,7 +35,7 @@ object  Channel{
 
       case Channel.permanentPattern(c) =>{
         println("permanent channel Created")
-        SharedStore.channelData.addPublicChannels(channelName)
+        SharedStore.channelData.addPermanentChannels(channelName)
         new BaseChannel(channelName) with PermanentChannel with PrivateChannel
       }
       case Channel.privatePattern(c) =>{
@@ -53,6 +53,7 @@ object  Channel{
       case _ =>{
         //public channel
         println("public channel Created")
+        SharedStore.channelData.addPublicChannels(channelName)
         new BaseChannel(channelName)
       }
     }
@@ -82,7 +83,7 @@ object  Channel{
    * @param data the wrapped event data
    */
   def publishEvent(channelName:String,data:String)={
-    Pusher.eventBus.publish(channelName,data)
+    Pusher.eventBus.publish(Pusher.eventBus_prefix + channelName,data)
   }
 }
 

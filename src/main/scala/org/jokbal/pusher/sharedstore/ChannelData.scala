@@ -10,15 +10,21 @@ import org.vertx.scala.core.json._
  * To change this template use File | Settings | File Templates.
  */
 class ChannelData(val sharedStore:SharedStore) {
+
   def addPublicChannels(channelName:String){
     sharedStore.sadd("public_channels",channelName)
   }
+
   def addPrivateChannels(channelName:String){
     sharedStore.sadd("private_channels",channelName)
   }
   def addPresenceChannels(channelName:String){
     sharedStore.sadd("presence_channels",channelName)
   }
+  def addPermanentChannels(channelName:String){
+    sharedStore.sadd("permanent_channels",channelName)
+  }
+
   def publicChannels(callback:JsonArray=>Unit){
     sharedStore.smembers("public_channels",callback)
   }
@@ -28,7 +34,11 @@ class ChannelData(val sharedStore:SharedStore) {
   def presenceChannels(callback:JsonArray=>Unit){
     sharedStore.smembers("presence_channels",callback)
   }
+  def permanentChannels(callback:JsonArray=>Unit){
+    sharedStore.smembers("permanent_channels",callback)
+  }
+
   def Channels(callback:JsonArray=>Unit){
-    sharedStore.sunion(callback,"public_channels","private_channels","presence_channels")
+    sharedStore.sunion(callback,"public_channels","private_channels","presence_channels","permanent_channels")
   }
 }

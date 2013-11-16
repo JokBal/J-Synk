@@ -58,22 +58,30 @@ trait GetChannels{
     var channelList : Array[Object] = null
 
     filter match {
+
+      case "permanent-" => SharedStore.channelData.permanentChannels({
+        json : JsonArray =>
+          println("case permanent" + json.toString)
+          channelList = json.toArray
+
+
+      })
       case "private-" => SharedStore.channelData.privateChannels({
         json : JsonArray =>
-          println("case 1" + json.toString)
+          println("case private" + json.toString)
           channelList = json.toArray
 
 
       })
       case "presence-" => SharedStore.channelData.presenceChannels({
         json : JsonArray =>
-          println("case 2" + json.toString)
+          println("case presence" + json.toString)
           channelList = json.toArray
 
       })
       case "" => SharedStore.channelData.Channels({
         json : JsonArray =>
-          println("case 3" + json.toString)
+          println("case public" + json.toString)
           channelList = json.toArray
       })
 
@@ -109,7 +117,7 @@ trait GetChannel extends GetChannels{
 
     var info : JsonObject = null
 
-    if(chName.contains("presence-")){
+    if(chName.contains("presence-") || chName.contains("permanent-")  ){
       info = super.getInfo(chName)
 
       if(info.getNumber("user_count") == 0){
@@ -147,9 +155,9 @@ trait GetUsers{
     val channelName = req.params().get("channelName")
     var json = new JsonObject
     var users = new JsonArray
-    if(!channelName.substring(0,9).equals("presence-")){
+    if(!channelName.contains("presence-") && !channelName.contains("permanent-")){
       responseCode = 400
-      responseMessage = "/users API is only for presence channel"
+      responseMessage = "/users API is only for presence or permanent channel"
       return false
     }else{
       SharedStore.presenceData(channelName).getPresence({

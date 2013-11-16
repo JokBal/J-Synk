@@ -12,7 +12,11 @@ class SocketServer extends Verticle {
     val conf = container.config()
     Pusher.init(conf,vertx.eventBus,vertx.sharedData)
 
-    vertx.createHttpServer().websocketHandler(
+    vertx.createHttpServer()
+      .setAcceptBacklog(2000000)
+      .setSendBufferSize(1024*4)
+      .setReceiveBufferSize(1024*4)
+      .websocketHandler(
     {
       socket:ServerWebSocket => {
         webSocketOpenHandler(socket)
