@@ -32,11 +32,12 @@ abstract class Connection {
         //}
       }
       case _ => {
+
       }
     }
   }
   def closeHandler(connection: Connection)(void:Void) {
-    Channel.unsubscribeAll(connection)
+    Channel.disconnectConnection(connection)
     ConnectionManager.disconnect(connection.socketId)
   }
 }

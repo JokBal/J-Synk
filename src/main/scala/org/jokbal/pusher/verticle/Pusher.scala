@@ -49,7 +49,7 @@ object Pusher{
     gcm_config = config.getObject("gcm_config",Json.emptyObj())
 
     gcm_address = gcm_config.getString("address")
-    gcm_apikey = config.getString("gcm_apikey")
+    gcm_apikey = "AIzaSyCpOcGx_k0FUzkDTttDOUB-9dec65gIOBo"
 
     //mongo config
     mongodb_config = new JsonObject();

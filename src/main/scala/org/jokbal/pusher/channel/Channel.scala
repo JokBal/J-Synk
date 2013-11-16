@@ -6,6 +6,7 @@ import org.vertx.scala.core.eventbus.EventBus
 import scala.collection.mutable
 import org.jokbal.pusher.verticle.Pusher
 import org.jokbal.pusher.sharedstore.SharedStore
+import org.jokbal.pusher.model.Event
 
 
 /**
@@ -83,15 +84,25 @@ object  Channel{
    * @param data the wrapped event data
    */
   def publishEvent(channelName:String,data:String)={
-    Pusher.eventBus.publish(Pusher.eventBus_prefix + channelName,data)
+    channelName match{
+      case Channel.permanentPattern(c) =>{
+        apply(channelName).publishEvent(data)
+      }
+      case _ =>{
+        Pusher.eventBus.publish(Pusher.eventBus_prefix + channelName,data)
+      }
+    }
+
   }
 }
 
 abstract class Channel{
+
   def subscribe(connection:Connection,data:JsonObject){}
   def unsubscribe(connection:Connection){}
   def disconnect(connection:Connection)
-  def publishEvent[T](event:String,data:T):Boolean
+  def publishEvent[T](event:String,data:T):Boolean=publishEvent(Event(event,channelName,data).toString)
+  def publishEvent(data:String):Boolean=false
   def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject){}
   def isClientTriggerEnabled:Boolean
   def signature(connection:Connection,data:JsonObject):String

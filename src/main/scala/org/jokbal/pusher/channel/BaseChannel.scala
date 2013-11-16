@@ -36,6 +36,7 @@ class BaseChannel(val channelName:String) extends Channel{
    */
   override def unsubscribe(connection:Connection){
     connections-=connection
+    println("unsubscribe")
   }
 
   def disconnect(connection:Connection){
@@ -70,22 +71,13 @@ class BaseChannel(val channelName:String) extends Channel{
     }
   }
 
-  /**
-   * publish event to event bus
-   * @param event the name of event
-   * @param data content of this event
-   * @return true is success to publish. false is not allowed to publish
-   */
-  override def publishEvent[T](event:String,data:T):Boolean={
-    publishEvent(Event(event,channelName,data).toString)
-  }
 
   /**
    * publish event to event bus
    * @param data the wrapped event data
    * @return true is success to publish. false is not allowed to publish
    */
-  def publishEvent(data:String):Boolean={
+  override def publishEvent(data:String):Boolean={
 
     Channel.publishEvent(channelName,data)
     true

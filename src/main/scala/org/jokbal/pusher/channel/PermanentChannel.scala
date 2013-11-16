@@ -59,7 +59,7 @@ trait PermanentChannel extends PresenceChannel{
         "data"->event,
         "registration_ids"->gcmKeys)
     )
-    Pusher.eventBus.send(Pusher.gcm_address,gcmSendData)
+    Pusher.eventBus.internal.send(Pusher.gcm_address,gcmSendData)
   }
 
 

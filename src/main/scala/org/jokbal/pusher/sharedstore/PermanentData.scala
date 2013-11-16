@@ -16,7 +16,8 @@ class PermanentData {
 
   def insertMobile(channel:String,mobileKey:String){
     val data = Json.obj("channel"->channel,"mobile"->mobileKey)
-    val request = Json.obj("action"->"insert","collection"->PERMANENT_TABLE,"document"->data)
+    val request = Json.obj("action"->"save","collection"->PERMANENT_TABLE,"document"->data)
+    println(request.toString)
     Pusher.eventBus.send(Pusher.mongodb_address,request,handleResult _)
   }
 
@@ -27,8 +28,9 @@ class PermanentData {
   }
 
   def getMobile(channel:String,callback:JsonArray=>Unit){
+    println("getMobileCalled")
     val data = Json.obj("channel"->channel)
-    val request = Json.obj("action"->"find","collection"->PERMANENT_TABLE,"matcher"->data,"keys"->Json.obj("mobile"->1))
+    val request = Json.obj("action"->"find","collection"->PERMANENT_TABLE,"matcher"->data)
     def resultCallback(msg:Message[JsonObject]){
       val status = msg.body.getString("status")
       if("error".equals(status))
