@@ -3,6 +3,7 @@ package org.jokbal.pusher.channel
 import org.jokbal.pusher.connection.Connection
 import org.vertx.scala.core.json.JsonObject
 import org.jokbal.pusher.util.Encryption
+import org.jokbal.pusher.verticle.Pusher
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,12 +22,10 @@ trait PrivateChannel extends Channel{
 
   def authUser(connection:Connection,data:JsonObject):Boolean=
   {
-    val apikey = "a080e81530d15631ff70"//TODO
-    val secret = "b13dc2ae75cc9047cd44"//TODO
-    val encryptedSignature = Encryption.hmacSHA256(secret,signature(connection,data))
+    return true
+    val encryptedSignature = Encryption.hmacsha256Representation(signature(connection,data),Pusher.secret)
     val auth = data.getString("auth")
-    //auth.equals(apikey+":"+encryptedSignature)
-    true
+    auth.equals(Pusher.apikey+":"+encryptedSignature)
   }
 
   override def isClientTriggerEnabled: Boolean = true

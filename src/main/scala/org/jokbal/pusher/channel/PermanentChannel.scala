@@ -22,6 +22,7 @@ trait PermanentChannel extends PresenceChannel{
     val mobile = data.getString("mobile")
     userMobileMap+=connection->mobile
     permanentData.deleteMobile(channelName,mobile)
+    data.removeField("mobile")
     super.addMember(connection,data)
   }
 

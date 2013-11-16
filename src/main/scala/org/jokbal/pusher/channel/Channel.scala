@@ -86,13 +86,13 @@ object  Channel{
 
 abstract class Channel{
   val channelName:String
-  val connections:mutable.Buffer[Connection]
+  val connections:mutable.ArrayBuffer[Connection] with mutable.SynchronizedBuffer[Connection]
   def subscribe(connection:Connection,data:JsonObject){}
   def unsubscribe(connection:Connection){}
-  def disconnect(connection:Connection)
+  def disconnect(connection:Connection){}
   def publishEvent[T](event:String,data:T):Boolean=publishEvent(Event(event,channelName,data).toString)
-  def publishEvent(data:String):Boolean
+  def publishEvent(data:String):Boolean=false
   def sendSubscribeSucceededMessage(connection:Connection,data:JsonObject){}
-  def isClientTriggerEnabled:Boolean
-  def signature(connection:Connection,data:JsonObject):String
+  def isClientTriggerEnabled:Boolean=false
+  def signature(connection:Connection,data:JsonObject):String=""
 }
