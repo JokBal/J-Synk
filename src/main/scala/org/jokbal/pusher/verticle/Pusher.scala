@@ -4,7 +4,6 @@ import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.eventbus.EventBus
 import org.vertx.scala.core.json._
 import org.vertx.scala.core.shareddata.SharedData
-import org.jokbal.pusher.util.WrappedEventBus
 import org.jokbal.pusher.sharedstore.SharedStore
 import org.vertx.scala.core.eventbus.Message
 import org.vertx.java.core.json.JsonObject

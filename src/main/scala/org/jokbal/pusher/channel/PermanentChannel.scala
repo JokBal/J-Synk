@@ -44,6 +44,10 @@ trait PermanentChannel extends PresenceChannel{
     super.publishEvent(event)
   }
 
+  def publishPermanentEvent(event: String){
+    permanentData.getMobile(channelName,handleMobileKeys(event) _)
+  }
+
   val GCM_MATCHER = "GCM:(.*)".r
   def handleMobileKeys(event: String)(keys:JsonArray)
   {

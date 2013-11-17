@@ -86,7 +86,8 @@ object  Channel{
   def publishEvent(channelName:String,data:String)={
     channelName match{
       case Channel.permanentPattern(c) =>{
-        apply(channelName).publishEvent(data)
+        apply(channelName).asInstanceOf[PermanentChannel].publishPermanentEvent(data)
+        Pusher.eventBus.publish(Pusher.eventBus_prefix + channelName,data)
       }
       case _ =>{
         Pusher.eventBus.publish(Pusher.eventBus_prefix + channelName,data)
@@ -97,7 +98,8 @@ object  Channel{
 }
 
 abstract class Channel{
-
+  val channelName:String
+  val connections:mutable.ArrayBuffer[Connection] with mutable.SynchronizedBuffer[Connection]
   def subscribe(connection:Connection,data:JsonObject){}
   def unsubscribe(connection:Connection){}
   def disconnect(connection:Connection)
