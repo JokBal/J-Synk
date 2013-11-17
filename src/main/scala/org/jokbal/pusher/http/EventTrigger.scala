@@ -4,7 +4,6 @@ import org.vertx.java.core.json.JsonObject
 import org.jokbal.pusher.channel.Channel
 
 class EventTrigger(body : String){
-
   val trigger = new JsonObject(body)
   val eventName = trigger.getString("name")
   val channels = trigger.getArray("channels").toArray.toSeq
@@ -45,7 +44,7 @@ class EventTrigger(body : String){
 
         try{
           Channel.publishEvent(channel,json.toString)
-          println(json.toString)
+          //println(json.toString)
         }catch{
           case e:NullPointerException => {
             responseCode = 400
@@ -61,7 +60,7 @@ class EventTrigger(body : String){
       return false
     }
 
-    println(responseCode + " : " + responseMessage)
+    //println(responseCode + " : " + responseMessage)
 
     return true
 

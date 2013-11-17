@@ -3,6 +3,7 @@ package org.jokbal.pusher.channel
 import org.jokbal.pusher.connection.Connection
 import org.vertx.scala.core.json.JsonObject
 import org.jokbal.pusher.util.Encryption
+import org.jokbal.pusher.verticle.Pusher
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,7 @@ import org.jokbal.pusher.util.Encryption
  * Time: 오후 8:49
  * To change this template use File | Settings | File Templates.
  */
-trait PrivateChannel extends BaseChannel{
+trait PrivateChannel extends Channel{
   // the auth data for this channel on whole Verticle
   //val authMap = mutable.HashMap[String,JsonObject]()
   override def subscribe(connection:Connection,data:JsonObject){
@@ -21,12 +22,10 @@ trait PrivateChannel extends BaseChannel{
 
   def authUser(connection:Connection,data:JsonObject):Boolean=
   {
-    val apikey = "a080e81530d15631ff70"//TODO
-    val secret = "b13dc2ae75cc9047cd44"//TODO
-    val encryptedSignature = Encryption.hmacSHA256(secret,signature(connection,data))
+    return true
+    val encryptedSignature = Encryption.hmacsha256Representation(signature(connection,data),Pusher.secret)
     val auth = data.getString("auth")
-    //auth.equals(apikey+":"+encryptedSignature)
-    true
+    auth.equals(Pusher.apikey+":"+encryptedSignature)
   }
 
   override def isClientTriggerEnabled: Boolean = true

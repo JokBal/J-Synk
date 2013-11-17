@@ -22,6 +22,7 @@ trait PermanentChannel extends PresenceChannel{
     val mobile = data.getString("mobile")
     userMobileMap+=connection->mobile
     permanentData.deleteMobile(channelName,mobile)
+    data.removeField("mobile")
     super.addMember(connection,data)
   }
 
@@ -59,7 +60,7 @@ trait PermanentChannel extends PresenceChannel{
         "data"->event,
         "registration_ids"->gcmKeys)
     )
-    Pusher.eventBus.internal.send(Pusher.gcm_address,gcmSendData)
+    Pusher.eventBus.send(Pusher.gcm_address,gcmSendData)
   }
 
 

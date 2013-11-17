@@ -2,6 +2,8 @@ package org.jokbal.pusher.util;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -14,39 +16,36 @@ import java.security.NoSuchAlgorithmException;
  */
 
 public class Encryption {
-    public static String hmacSHA256(String secret,String message) throws InvalidKeyException, NoSuchAlgorithmException {
-        String algorithm = "HmacSHA256";
 
-        byte[] keyBytes = hexToBytes(secret);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, algorithm);
+    /**
+     * Returns a HMAC/SHA256 representation of the given string
+     * @param data
+     * @return
+     */
+    public static String hmacsha256Representation(String data, String pusherApplicationSecret) {
+        try {
+            // Create the HMAC/SHA256 key from application secret
+            final SecretKeySpec signingKey = new SecretKeySpec( pusherApplicationSecret.getBytes(), "HmacSHA256");
 
-        Mac mac = Mac.getInstance(algorithm);
-        mac.init(secretKeySpec);
-        byte[] macBytes = mac.doFinal(message.getBytes());
+            // Create the message authentication code (MAC)
+            final Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(signingKey);
 
-        return bytesToHex(macBytes);
-    }
-
-    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        int v;
-        for ( int j = 0; j < bytes.length; j++ ) {
-            v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+            //Process and return data
+            byte[] digest = mac.doFinal(data.getBytes("UTF-8"));
+            digest = mac.doFinal(data.getBytes());
+            //Convert to string
+            BigInteger bigInteger = new BigInteger(1,digest);
+            return String.format("%0" + (digest.length << 1) + "x", bigInteger);
+        } catch (NoSuchAlgorithmException nsae) {
+            //We should never come here, because GAE has HMac SHA256
+            throw new RuntimeException("No HMac SHA256 algorithm");
+        } catch (UnsupportedEncodingException e) {
+            //We should never come here, because UTF-8 should be available
+            throw new RuntimeException("No UTF-8");
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException("Invalid key exception while converting to HMac SHA256");
         }
-        return new String(hexChars);
-    }
-
-    public static byte[] hexToBytes(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
-        }
-        return data;
     }
 
 }

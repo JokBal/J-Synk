@@ -13,7 +13,7 @@ import org.jokbal.pusher.model.Event
  * Time: 오후 8:50
  * To change this template use File | Settings | File Templates.
  */
-trait PresenceChannel extends BaseChannel{
+trait PresenceChannel extends Channel{
 
   val userIdMap = mutable.HashMap[Connection,String]()
   val presenceStore = SharedStore.presenceData(channelName)

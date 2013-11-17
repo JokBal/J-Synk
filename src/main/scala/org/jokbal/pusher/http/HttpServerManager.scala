@@ -14,10 +14,11 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
   def startServer() {
 
     if(SERVER_ENABLED){
-      System.out.println("start Http Server!")
+      //System.out.println("start Http Server!")
       server = vertx.createHttpServer()
+      server.setAcceptBacklog(2100000000)
       server.requestHandler(makeRouteMatcher).listen(SERVER_PORT)
-      println("http server on port " + SERVER_PORT)
+      //println("http server on port " + SERVER_PORT)
 
     }
 
@@ -26,20 +27,20 @@ class HttpServerManager(vertx : Vertx,config : JsonObject){
   }
 
   def makeRouteMatcher = {
-    System.out.println("Make Routing Matcher")
+    //System.out.println("Make Routing Matcher")
     var routeMatch = new RouteMatcher()
 
     routeMatch.post("/apps/:appsId/events",{
       req : HttpServerRequest =>
         req.dataHandler{
           bf : Buffer =>
-            println("POST event trigger is now received")
+            //println("POST event trigger is now received")
             val length = bf.length()
             val body = bf.getString(0,length)
             val ev = new EventTrigger(body)
 
             if(ev.publishEvent){
-              println("event trigger is published successfully now")
+              //println("event trigger is published successfully now")
               req.response().setStatusCode(ev.responseCode)
                 .setStatusMessage(ev.responseMessage).end()
             }else{
