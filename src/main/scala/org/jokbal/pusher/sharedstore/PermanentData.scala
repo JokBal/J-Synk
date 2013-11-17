@@ -28,14 +28,15 @@ class PermanentData {
   }
 
   def getMobile(channel:String,callback:JsonArray=>Unit){
-    println("getMobileCalled")
     val data = Json.obj("channel"->channel)
     val request = Json.obj("action"->"find","collection"->PERMANENT_TABLE,"matcher"->data)
+    println("getMobileCalled"+request.toString)
     def resultCallback(msg:Message[JsonObject]){
+      println("mobile result callbakc called"+msg.body.toString)
       val status = msg.body.getString("status")
       if("error".equals(status))
-        error(msg.body.getString("message"));return
-      callback(msg.body.getArray("results"))
+      {error(msg.body.getString("message"));return}
+      callback.apply(msg.body.getArray("results"))
     }
     Pusher.eventBus.send(Pusher.mongodb_address,request,resultCallback _)
   }
@@ -47,6 +48,6 @@ class PermanentData {
   }
 
   def error(message:String){
-    printf(message)
+    println(message)
   }
 }

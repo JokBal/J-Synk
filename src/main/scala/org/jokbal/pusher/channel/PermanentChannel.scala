@@ -5,6 +5,7 @@ import org.vertx.scala.core.json._
 import scala.collection.mutable
 import org.jokbal.pusher.verticle.Pusher
 import org.jokbal.pusher.sharedstore.SharedStore
+import org.vertx.scala.core.eventbus.Message
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +14,37 @@ import org.jokbal.pusher.sharedstore.SharedStore
  * Time: 오후 5:21
  * To change this template use File | Settings | File Templates.
  */
+
+object PermanentChannel {
+  lazy val permanentData = SharedStore.permanentData
+  def publishPermanentEvent(channelName:String, event: String){
+    println("publish permanent    "+channelName+"      "+event)
+    permanentData.getMobile(channelName,handleMobileKeys(event))
+  }
+
+  val GCM_MATCHER = "GCM:(.*)".r
+  def handleMobileKeys(event: String)(keys:JsonArray)
+  {
+    val gcmKeys= Json.emptyArr()
+    for(i<-Range(0,keys.size())) keys.get[JsonObject](i).getString("mobile") match{
+      case GCM_MATCHER(key)=>
+        gcmKeys addString key
+    }
+
+    val jsonEvent =Json.fromObjectString(event)
+
+    val gcmSendData = Json.obj(
+      "data"->jsonEvent,
+      "registration_ids"->gcmKeys)
+
+    Pusher.eventBus.send(Pusher.gcm_address,gcmSendData,
+    { msg:Message[JsonObject]=>
+      println(msg.body.toString)
+    })
+  }
+
+}
+
 trait PermanentChannel extends PresenceChannel{
 
   val userMobileMap = mutable.HashMap[Connection,String]()
@@ -38,35 +70,11 @@ trait PermanentChannel extends PresenceChannel{
   def addOfflineConnection(mobile:String){
     permanentData.insertMobile(channelName,mobile)
   }
-
+    /*
   override def publishEvent(event: String): Boolean = {
-    permanentData.getMobile(channelName,handleMobileKeys(event) _)
+    PermanentChannel.publishPermanentEvent(channelName,event)
     super.publishEvent(event)
-  }
-
-  def publishPermanentEvent(event: String){
-    permanentData.getMobile(channelName,handleMobileKeys(event) _)
-  }
-
-  val GCM_MATCHER = "GCM:(.*)".r
-  def handleMobileKeys(event: String)(keys:JsonArray)
-  {
-    val gcmKeys= mutable.Buffer[String]()
-    val keyArray = keys.toArray
-    for(i<-keyArray) i match{
-      case GCM_MATCHER(key)=>
-        gcmKeys+=key
-    }
-
-    val gcmSendData = Json.obj(
-      "api_key"->Pusher.gcm_apikey,
-      "notification"->Json.obj(
-        "data"->event,
-        "registration_ids"->gcmKeys)
-    )
-    Pusher.eventBus.send(Pusher.gcm_address,gcmSendData)
-  }
-
+  }    */
 
   override def removeMember(connection: Connection){
     userMobileMap-=connection

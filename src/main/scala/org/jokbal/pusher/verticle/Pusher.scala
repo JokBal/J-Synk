@@ -22,7 +22,6 @@ object Pusher{
   var redis_config:JsonObject=null
   var permanent_enabled:Boolean=false
   var gcm_address:String=null
-  var gcm_apikey:String=null
   var gcm_config:JsonObject=null
   var mongodb_config:JsonObject=null
   var mongodb_address:String=null
@@ -47,8 +46,15 @@ object Pusher{
     //gcm config
     gcm_config = config.getObject("gcm_config",Json.emptyObj())
 
-    gcm_address = gcm_config.getString("address")
-    gcm_apikey = "AIzaSyCpOcGx_k0FUzkDTttDOUB-9dec65gIOBo"
+    //TODO Fix it
+    gcm_config = Json.obj("address"->"gcm_address", "api_key"->"AIzaSyCpOcGx_k0FUzkDTttDOUB-9dec65gIOBo")
+
+    gcm_address = gcm_config.getString("address","")
+    if(gcm_address.equals(""))
+    {
+      gcm_address="gcm_address"
+      gcm_config.putString("address",gcm_address)
+    }
 
     //mongo config
     mongodb_config = new JsonObject();
@@ -75,8 +81,6 @@ object Pusher{
 
 
 
-
-
   }
 }
 
@@ -87,9 +91,10 @@ class Pusher extends Verticle {
     Pusher.init(config,vertx.eventBus,vertx.sharedData)
     container.deployVerticle("scala:org.jokbal.pusher.verticle.SocketServer",config, 5)
     container.deployVerticle("scala:org.jokbal.pusher.verticle.HttpServerVerticle",config)
+    container.deployVerticle("scala:org.jokbal.pusher.verticle.GCMSenderVerticle",Pusher.gcm_config)
     container.deployModule("io.vertx~mod-redis~1.1.3",Pusher.redis_config)
     container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",Pusher.mongodb_config)
-    container.deployModule("ashertarno~vertx-gcm~2.0.0",Pusher.gcm_config)
+
 
 
   }

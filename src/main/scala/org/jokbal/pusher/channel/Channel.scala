@@ -86,7 +86,7 @@ object  Channel{
   def publishEvent(channelName:String,data:String)={
     channelName match{
       case Channel.permanentPattern(c) =>{
-        apply(channelName).asInstanceOf[PermanentChannel].publishPermanentEvent(data)
+        PermanentChannel.publishPermanentEvent(channelName, data)
         Pusher.eventBus.publish(Pusher.eventBus_prefix + channelName,data)
       }
       case _ =>{
