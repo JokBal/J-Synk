@@ -10,8 +10,8 @@ import org.vertx.java.core.json.JsonObject
 import org.vertx.scala.core.json.JsonObject
 
 object Pusher{
-  var apikey = ""
-  var secret = ""
+  var apikey = "a080e81530d15631ff70"
+  var secret = "b13dc2ae75cc9047cd44"
   var port:Int =0
   var eventBus_prefix:String=null
   var external_address:String=null

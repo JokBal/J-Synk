@@ -22,9 +22,10 @@ trait PrivateChannel extends Channel{
 
   def authUser(connection:Connection,data:JsonObject):Boolean=
   {
-    return true
+    //return true
     val encryptedSignature = Encryption.hmacsha256Representation(signature(connection,data),Pusher.secret)
     val auth = data.getString("auth")
+    println("Auth process Success")
     auth.equals(Pusher.apikey+":"+encryptedSignature)
   }
 
