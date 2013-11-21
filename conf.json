@@ -1,4 +1,27 @@
 {
-    "server_port" : 9999,
-    "server_enabled" : true
+    "api_key"="any_string"
+    "secret"="any_secret_string, same with app server"
+    "port":8000,
+    "eventbus_prefix":"J-Synk::",
+    "shareddata_prefix":"J-Synk::"
+    "address":"J-Synk"
+
+    "redis_enabled"=true,
+    "redis_config"={
+        "address": "J-Synk::redis",
+    },
+
+    "permanent_enable":"true"
+    "mongodb_config"={
+        "address": "J-Synk::mongodb",
+    },
+    "gcm_config":{
+        "api_key":"<YOUR GCM SERVER KEY>"
+    },
+
+    "api_server_instance":1,
+    "socket_server_instance":1,
+    "redis_instance":1
+    "mongo_instance":1
+
 }

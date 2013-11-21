@@ -51,7 +51,7 @@ class BaseChannel(val channelName:String) extends Channel{
     for(connection <- send_connections)
     {
       try{
-        connection.sendTextFrame(event.toString)
+        connection.sendTextFrame(event)
       }catch{
         case e : Exception =>
           disconnect(connection)
